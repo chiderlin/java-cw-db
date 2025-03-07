@@ -253,12 +253,49 @@ public class Database {
   }
 
 
-  //TODO:updateData
+  //TODO:Test updateData
   /**
    *   UPDATE marks SET age = 35 WHERE name == 'Simon';
    *    [OK]
    */
-  public void updateData(){
+  public void updateData(String tableName, String columnName, String newValue, List<String> conditions){
+    if(!tables.containsKey(tableName)){
+      System.out.println("Table " + tableName + "does not exists.");
+      return;
+    }
+
+    List<List<String>> table = tables.get(tableName);
+
+    // Get table header;
+    List<String> header = table.get(0);
+
+    //find the col index to udpate;
+    int colIdx = header.indexOf(columnName);
+    if(colIdx == -1){
+      System.out.println("Column " + columnName + " not found in table " + tableName);
+      return ;
+    }
+
+    // parse WHERE conditions
+    List<QueryCondition> parsedConditions = conditions.stream()
+              .map(cond -> this.parseCondition(cond, header))
+              .filter(obj -> obj != null)
+              .collect(Collectors.toList());
+    
+    // update rows matching the condition
+    for(int i=1; i<table.size(); i++){
+      List<String> row = table.get(i);
+      boolean match = parsedConditions.stream().allMatch(cond -> compareValue(cond.operator, row.get(cond.columnIndex), cond.targetValue));
+    
+      if(match) {
+        System.out.println("Updating row: " + row);
+        row.set(colIdx, newValue);
+      }
+    }
+
+    // save updated table
+    tables.put(tableName, table);
+    System.out.println("Table " + tableName + " updated successfully.");
 
   }
 
@@ -327,7 +364,8 @@ public class Database {
     // return Collections.emptyList();
   }
 
-  //TODO:getData
+
+  //TODO:test getData
   /**
    *   SELECT * FROM marks;
    *    [OK]
@@ -388,6 +426,7 @@ public class Database {
     return Collections.emptyList();
   }
 
+
   private QueryCondition parseCondition(String condition, List<String> header){
     Pattern pattern = Pattern.compile("\\s*(==|!=|>=|<=|>|<)\\s*");
     Matcher matcher = pattern.matcher(condition);
@@ -430,13 +469,16 @@ public class Database {
   }
 
 
-  //TODO:joinData
-  /**
+  /* TODO:test joinData
+   * 
    * JOIN coursework AND marks ON submission AND id;
+   * 
+   * Way of using it:
+   * List<List<String>> result = joinData("coursework", "marks", "marksId", "id");
    */
   public List<List<String>> joinData(String table1Name, String table2Name, String table1JoinCol, String table2JoinCol){
     if(!tables.containsKey(table1Name) || !tables.containsKey(table2Name)){
-      System.out.println("One or both tables do not exist.")
+      System.out.println("One or both tables do not exist.");
       return Collections.emptyList();
     }
 
@@ -458,11 +500,11 @@ public class Database {
     }
 
     //create the joined header
-    List<String> joinedHeader = new ArrayList<>(header1)
+    List<String> joinedHeader = new ArrayList<>(header1);
     joinedHeader.addAll(header2);
 
     // create a list to store the joined rows
-    List<List<String>> joinedTable = new ArrayList<>()
+    List<List<String>> joinedTable = new ArrayList<>();
     joinedTable.add(joinedHeader);
 
     // perform the join
@@ -470,7 +512,7 @@ public class Database {
       List<String> row1 = table1.get(i);
       for(int j=1; j< table2.size(); j++){
         List<String> row2 = table2.get(j);
-        if(row1.get(joinIdx1).equals(row2.get(joinIdex2))){ // watching rows
+        if(row1.get(joinIdx1).equals(row2.get(joinIdx2))){ // watching rows
           List<String> joinedRow = new ArrayList<>(row1);
           joinedRow.addAll(row2);
           joinedTable.add(joinedRow);
@@ -478,6 +520,122 @@ public class Database {
       }
     }
     return joinedTable;
+  }
+
+
+  /* TODO:test alterData
+   * add col or drop col
+   * ALTER TABLE marks ADD age;
+   * ALTER TABLE marks DROP pass;
+  */
+  public void alterData(String tableName, String action, String columnName){
+    if(!tables.containsKey(tableName)){
+      System.out.println("Table " + tableName + "does not exist.");
+      return ;
+    }
+    List<List<String>> table = tables.get(tableName);
+
+    List<String> header = new ArrayList<>(table.get(0));
+    if("ADD".equalsIgnoreCase(action)){
+      if(header.contains(columnName)){
+        System.out.println("Column " + columnName + " already exists in table " + tableName);
+        return ;
+      }
+      // Add column to header 
+      header.add(columnName);
+      System.out.println("Column " + columnName + " added successfully.");
+
+      // Add default empty values to existing rows;
+      for(int i=1; i<table.size(); i++){
+        table.get(i).add(""); // add an empty string as the default value;
+      }
+    } else if ("DROP".equalsIgnoreCase(action)){
+      int colIdx = header.indexOf(columnName);
+      if(colIdx == -1){
+        System.out.println("Column " + columnName + " does not exist in table " + tableName);
+        return ;
+      }
+
+      //Remove col from header
+      header.remove(colIdx);
+      System.out.println("Column " + columnName + " dropped successfully.");
+
+      // Remove col from all rows
+      for(int i=1; i<table.size(); i++){
+        table.get(i).remove(colIdx);
+      }
+
+    } else {
+      System.out.println("Invalid action: " + action + ". Use ADD or DROP.");
+      return ;
+    }
+
+    // save updated table
+    table.set(0, header);
+    tables.put(tableName, table);
+
+  }
+
+  /*TODO:test deleteData
+   * DELETE FROM marks WHERE name == 'Sion';
+  */
+  public void deleteData(String tableName, List<String> conditions){
+    // ensure table exists;
+    loadTableData(tableName);
+    _printTable(tableName);
+    if(!tables.containsKey(tableName)){
+      System.out.println("Table " + tableName + "does not exists.");
+      return ;
+    }
+
+    List<List<String>> table = tables.get(tableName);
+    List<String> header = table.get(0);
+    List<QueryCondition> parsedConditions = conditions.stream()
+              .map(cond -> this.parseCondition(cond, header))
+              .filter(obj -> obj != null)
+              .collect(Collectors.toList());
+
+    List<List<String>> updatedTable = table.stream()
+              .filter(row -> row == header || parsedConditions.stream().noneMatch(cond -> compareValue(cond.operator, row.get(cond.columnIndex), cond.targetValue)))
+              .collect(Collectors.toList());
+
+
+    // check if any rows were deleted
+    if(updatedTable.size() == table.size()){
+      System.out.println("No matching records found to delete.");
+      return ;
+    }
+
+    // save updated table
+    tables.put(tableName, updatedTable);
+    System.out.println("Rows matching condition deleted successfully.");
+  }
+
+
+  /* TODO:test dropTable
+   * DROP TABLE marks;
+   */
+  public void dropTable(String tableName){
+    
+    // 1. clean tables obj{} data
+    if(tables.containsKey(tableName)){
+      tables.remove(tableName);
+    }
+    
+    
+    // 2. delete .tab file
+    String fileName = String.format("databases/%s/%s.tab", dbName, tableName);
+    File file = new File(fileName);
+    if(!file.exists()){
+      System.out.println("File not found: "+ fileName);
+      return ;
+    }
+    if(file.delete()){
+      System.out.println("Table '" + tableName + "' removed successfully.");
+    } else {
+      System.out.println("Failed to delete file: " + tableName);
+    }
+    return ;
   }
 
 }
