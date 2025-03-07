@@ -48,7 +48,7 @@ public class Database {
    *    email: string
    *   }
    *  ],
-   * 
+   * >
    *  sheds: [
    *   {
    *    id: int,
@@ -64,7 +64,7 @@ public class Database {
    *   },
    *  ]
    * 
-   * 2.
+   * 2.>
    * tables = {
    *  users:[[1,'bob',21,'bob@bob.net'],[2,'bob',21,'bob@bob.net'],[1,'bob',21,'bob@bob.net']]
    *  sheds:[[1,'Plaza',1200,1],[2,'Plaza',1200,1]],
@@ -434,10 +434,50 @@ public class Database {
   /**
    * JOIN coursework AND marks ON submission AND id;
    */
-  public void joinData(){
+  public List<List<String>> joinData(String table1Name, String table2Name, String table1JoinCol, String table2JoinCol){
+    if(!tables.containsKey(table1Name) || !tables.containsKey(table2Name)){
+      System.out.println("One or both tables do not exist.")
+      return Collections.emptyList();
+    }
 
+    List<List<String>> table1 = tables.get(table1Name);
+    List<List<String>> table2 = tables.get(table2Name);
+
+    // Get header from both tables;
+    List<String> header1 = table1.get(0);
+    List<String> header2 = table2.get(0);
+
+    
+    // find the index of the join col in both tables.
+    int joinIdx1 = header1.indexOf(table1JoinCol);
+    int joinIdx2 = header2.indexOf(table2JoinCol);
+
+    if(joinIdx1 == -1 || joinIdx2 == -1) {
+      System.out.println("Join column not found in one or both tables.");
+      return Collections.emptyList();
+    }
+
+    //create the joined header
+    List<String> joinedHeader = new ArrayList<>(header1)
+    joinedHeader.addAll(header2);
+
+    // create a list to store the joined rows
+    List<List<String>> joinedTable = new ArrayList<>()
+    joinedTable.add(joinedHeader);
+
+    // perform the join
+    for(int i=1; i< table1.size(); i++){ // skip header row
+      List<String> row1 = table1.get(i);
+      for(int j=1; j< table2.size(); j++){
+        List<String> row2 = table2.get(j);
+        if(row1.get(joinIdx1).equals(row2.get(joinIdex2))){ // watching rows
+          List<String> joinedRow = new ArrayList<>(row1);
+          joinedRow.addAll(row2);
+          joinedTable.add(joinedRow);
+        }
+      }
+    }
+    return joinedTable;
   }
-
-
 
 }
