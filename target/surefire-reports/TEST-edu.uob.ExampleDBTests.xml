@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="edu.uob.ExampleDBTests" time="0.313" tests="4" errors="4" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="23"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/Users/chider/code/bristol/cw-db/target/test-classes:/Users/chider/code/bristol/cw-db/target/classes:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/chider/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/chider/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite/1.8.2/junit-platform-suite-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-api/1.8.2/junit-platform-suite-api-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.8.2/junit-platform-suite-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.8.2/junit-platform-suite-commons-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar:"/>
+    <property name="java.vm.vendor" value="Homebrew"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="java.vm.specification.version" value="23"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="TW"/>
+    <property name="sun.boot.library.path" value="/usr/local/Cellar/openjdk/23.0.1/libexec/openjdk.jdk/Contents/Home/lib"/>
+    <property name="sun.java.command" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter12044423757868492113.jar /Users/chider/code/bristol/cw-db/target/surefire 2025-03-03T21-34-06_843-jvmRun1 surefire14739230407556074484tmp surefire_012936458554932063944tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/Users/chider/code/bristol/cw-db/target/test-classes:/Users/chider/code/bristol/cw-db/target/classes:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/chider/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/chider/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite/1.8.2/junit-platform-suite-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-api/1.8.2/junit-platform-suite-api-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.8.2/junit-platform-suite-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.8.2/junit-platform-suite-commons-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/Users/chider"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2024-10-15"/>
+    <property name="java.home" value="/usr/local/Cellar/openjdk/23.0.1/libexec/openjdk.jdk/Contents/Home"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/Users/chider/code/bristol/cw-db"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="apple.awt.application.name" value="ForkedBooter"/>
+    <property name="surefire.real.class.path" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter12044423757868492113.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="23.0.1"/>
+    <property name="user.name" value="chider"/>
+    <property name="stdout.encoding" value="UTF-8"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="13.6.1"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Homebrew"/>
+    <property name="localRepository" value="/Users/chider/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/Homebrew/homebrew-core/issues"/>
+    <property name="java.io.tmpdir" value="/var/folders/5t/7jwtj6dx0vgb0_l47fc3dxyh0000gn/T/"/>
+    <property name="java.version" value="23.0.1"/>
+    <property name="user.dir" value="/Users/chider/code/bristol/cw-db"/>
+    <property name="os.arch" value="x86_64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/chider/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="stderr.encoding" value="UTF-8"/>
+    <property name="java.vendor" value="Homebrew"/>
+    <property name="java.vm.version" value="23.0.1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="java.class.version" value="67.0"/>
+  </properties>
+  <testcase name="testQueryID" classname="edu.uob.ExampleDBTests" time="0.149">
+    <error type="java.lang.NullPointerException"><![CDATA[java.lang.NullPointerException: Cannot invoke "java.util.List.size()" because "table" is null
+	at edu.uob.Database._printTable(Database.java:165)
+	at edu.uob.Database.getData(Database.java:278)
+	at edu.uob.DBServer.parseSelect(DBServer.java:213)
+	at edu.uob.DBServer.handleCommand(DBServer.java:79)
+	at edu.uob.ExampleDBTests.lambda$sendCommandToServer$0(ExampleDBTests.java:30)
+	at org.junit.jupiter.api.AssertTimeout.lambda$assertTimeoutPreemptively$4(AssertTimeout.java:138)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+]]></error>
+    <system-out><![CDATA[Switch database required.
+
+Switch database: dhubgpuijy; successfully.
+[OK]
+values: [name, mark, pass);]
+path.toString() /Users/chider/code/bristol/cw-db/databases/dhubgpuijy;
+lastPart dhubgpuijy;
+[OK]
+conditions.length: 1
+conditions: name == 'Simon'
+tablename: marks
+and: []
+or: []
+condition: [name == 'Simon']
+cols: [id]
+in.....
+condition: {condition=[name == 'Simon'], or=[], and=[]}
+File not found: databases/dhubgpuijy;/marks.tab
+]]></system-out>
+    <system-err><![CDATA[No such file or directory
+]]></system-err>
+  </testcase>
+  <testcase name="testBasicCreateAndQuery" classname="edu.uob.ExampleDBTests" time="0.016">
+    <error type="java.lang.NullPointerException"><![CDATA[java.lang.NullPointerException: Cannot invoke "java.util.List.size()" because "table" is null
+	at edu.uob.Database._printTable(Database.java:165)
+	at edu.uob.Database.getData(Database.java:278)
+	at edu.uob.DBServer.parseSelect(DBServer.java:213)
+	at edu.uob.DBServer.handleCommand(DBServer.java:79)
+	at edu.uob.ExampleDBTests.lambda$sendCommandToServer$0(ExampleDBTests.java:30)
+	at org.junit.jupiter.api.AssertTimeout.lambda$assertTimeoutPreemptively$4(AssertTimeout.java:138)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+]]></error>
+    <system-out><![CDATA[randomName: jxtkvnwgyh
+Switch database required.
+
+Switch database: jxtkvnwgyh; successfully.
+[OK]
+values: [name, mark, pass);]
+path.toString() /Users/chider/code/bristol/cw-db/databases/jxtkvnwgyh;
+lastPart jxtkvnwgyh;
+[OK]
+tablename: ERROR
+and: []
+or: []
+condition: null
+cols: [*]
+in.....
+condition: {condition=null, or=[], and=[]}
+File not found: databases/jxtkvnwgyh;/ERROR.tab
+]]></system-out>
+    <system-err><![CDATA[No such file or directory
+]]></system-err>
+  </testcase>
+  <testcase name="testTablePersistsAfterRestart" classname="edu.uob.ExampleDBTests" time="0.044">
+    <error type="java.lang.NullPointerException"><![CDATA[java.lang.NullPointerException: Cannot invoke "java.util.List.size()" because "table" is null
+	at edu.uob.Database._printTable(Database.java:165)
+	at edu.uob.Database.getData(Database.java:278)
+	at edu.uob.DBServer.parseSelect(DBServer.java:213)
+	at edu.uob.DBServer.handleCommand(DBServer.java:79)
+	at edu.uob.ExampleDBTests.lambda$sendCommandToServer$0(ExampleDBTests.java:30)
+	at org.junit.jupiter.api.AssertTimeout.lambda$assertTimeoutPreemptively$4(AssertTimeout.java:138)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+]]></error>
+    <system-out><![CDATA[Switch database required.
+
+Switch database: xsyfbylgme; successfully.
+[OK]
+values: [name, mark, pass);]
+path.toString() /Users/chider/code/bristol/cw-db/databases/xsyfbylgme;
+lastPart xsyfbylgme;
+[OK]
+Switch database: xsyfbylgme; successfully.
+[OK]
+tablename: ERROR
+and: []
+or: []
+condition: null
+cols: [*]
+in.....
+condition: {condition=null, or=[], and=[]}
+File not found: databases/xsyfbylgme;/ERROR.tab
+]]></system-out>
+    <system-err><![CDATA[No such file or directory
+]]></system-err>
+  </testcase>
+  <testcase name="testForErrorTag" classname="edu.uob.ExampleDBTests" time="0.016">
+    <error type="java.lang.NullPointerException"><![CDATA[java.lang.NullPointerException: Cannot invoke "java.util.List.size()" because "table" is null
+	at edu.uob.Database._printTable(Database.java:165)
+	at edu.uob.Database.getData(Database.java:278)
+	at edu.uob.DBServer.parseSelect(DBServer.java:213)
+	at edu.uob.DBServer.handleCommand(DBServer.java:79)
+	at edu.uob.ExampleDBTests.lambda$sendCommandToServer$0(ExampleDBTests.java:30)
+	at org.junit.jupiter.api.AssertTimeout.lambda$assertTimeoutPreemptively$4(AssertTimeout.java:138)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+]]></error>
+    <system-out><![CDATA[Switch database required.
+
+Switch database: aegwqcnufr; successfully.
+[OK]
+values: [name, mark, pass);]
+path.toString() /Users/chider/code/bristol/cw-db/databases/aegwqcnufr;
+lastPart aegwqcnufr;
+[OK]
+tablename: ERROR
+and: []
+or: []
+condition: null
+cols: [*]
+in.....
+condition: {condition=null, or=[], and=[]}
+File not found: databases/aegwqcnufr;/ERROR.tab
+]]></system-out>
+    <system-err><![CDATA[No such file or directory
+]]></system-err>
+  </testcase>
+</testsuite>
