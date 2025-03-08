@@ -32,52 +32,15 @@ public class Database {
   private List<String> tableColumn = new ArrayList<>();
   private HashMap<String, List<List<String>>> tables = new HashMap<>(); // type 2
   /**
-   * 1.
-   * tables = {
-   *  users: [
-   *   {
-   *    id: int,
-   *    name: string,
-   *    age: int,
-   *    email: string
-   *   },
-   *   {
-   *    id: int,
-   *    name: string,
-   *    age: int,
-   *    email: string
-   *   }
-   *  ],
-   * >
-   *  sheds: [
-   *   {
-   *    id: int,
-   *    name: string,
-   *    height: int,
-   *    purchaserId: int
-   *   },
-   *   {
-   *    id: int,
-   *    name: string,
-   *    height: int,
-   *    purchaserId: int
-   *   },
-   *  ]
-   * 
-   * 2.>
    * tables = {
    *  users:[[1,'bob',21,'bob@bob.net'],[2,'bob',21,'bob@bob.net'],[1,'bob',21,'bob@bob.net']]
    *  sheds:[[1,'Plaza',1200,1],[2,'Plaza',1200,1]],
    * }
-   * 
-   * }
    */
   
 
-
   public Database(String dbName){
     this.dbName = dbName;
-    // this.tableName = 
   }
 
   public static void main(String args[]) {
@@ -132,6 +95,7 @@ public class Database {
 
   public void _printTable(String tableName){
     List<List<String>> table = this.tables.get(tableName);
+    System.out.println("table :" + table);
     if(table != null && !table.isEmpty()){
       System.out.println("table.size() " + table.size());
       System.out.println(String.format("print table <%s>: %s",tableName,table));
@@ -142,13 +106,7 @@ public class Database {
   
   
   /*
-  skip datatype just now.. seems not necessary 
-  CREATE TABLE User (
-      id int -> generate automatically
-      Name varchar(50),
-      Age int,
-      Email varchar(50)
-  );
+    CREATE TABLE marks (name, mark, pass);
   */ 
   public String createTable(String tableName, Path path, List<String> values){
     
@@ -162,10 +120,16 @@ public class Database {
         return "[ERROR]";
     }
 
-    String data = String.join("\t",values);
+
+    List<String> tableSchema = new ArrayList<>();
+    tableSchema.add("id");
+    tableSchema.addAll(values);
+    tableSchema.add("_DELETED");
+
+    String data = String.join("\t", tableSchema);
     TableIO tableIO = new TableIO(this.dbName, tableName);
     tableIO.writeFile(data, false);
-
+    System.out.println("[OK] Table " + tableName + " created with schema: " + tableSchema);
     return "[OK]";
   }
 
@@ -180,14 +144,16 @@ public class Database {
     loadTableData(tableName);
     _printTable(tableName);
     List<List<String>> table = this.tables.get(tableName);
-    if(table == null) {
-      System.out.println("Table not found: " + tableName);
+    if(tables == null || !tables.containsKey(tableName)){
+      System.out.println("[ERROR] Table not found: " + tableName);
       return ;
     }
     List<String> newData = new ArrayList<String>();
     String id = this.getNewId(table);
     newData.add(id);
     newData.addAll(values); //[name, height, purchaserID]
+    newData.add("FALSE");
+
     // add into table
     table.add(newData);
     this.exportDataToTabFile(tableName);
@@ -219,217 +185,114 @@ public class Database {
   //TODO:Test updateData
   /**
    *   UPDATE marks SET age = 35 WHERE name == 'Simon';
+   *   UPDATE test SET age = 35, City= 'Frankfurt' WHERE age < 18;
    *    [OK]
    */
-  public void updateData(String tableName, String columnName, String newValue, List<String> conditions){
-    if(!tables.containsKey(tableName)){
-      System.out.println("Table " + tableName + "does not exists.");
-      return;
+  public void updateData(String tableName, Map<String, String> updates, ConditionNode conditionTree){
+    loadTableData(tableName);
+    _printTable(tableName);
+
+    if (!tables.containsKey(tableName)) {
+        System.out.println("[ERROR] Table " + tableName + " does not exist.");
+        return;
     }
 
     List<List<String>> table = tables.get(tableName);
-
-    // Get table header;
     List<String> header = table.get(0);
 
-    //find the col index to udpate;
-    int colIdx = header.indexOf(columnName);
-    if(colIdx == -1){
-      System.out.println("Column " + columnName + " not found in table " + tableName);
-      return ;
+    // **🚀 1. 轉換 `header` 欄位名稱為大寫**
+    List<String> headerUpper = header.stream()
+            .map(String::toUpperCase)
+            .collect(Collectors.toList());
+
+    // **🚀 2. 轉換 `updates` 的 key 為大寫比對**
+    Map<String, String> updatesUpper = new HashMap<>();
+    for (Map.Entry<String, String> entry : updates.entrySet()) {
+        updatesUpper.put(entry.getKey().toUpperCase(), entry.getValue());
     }
 
-    // parse WHERE conditions
-    List<QueryCondition> parsedConditions = conditions.stream()
-              .map(cond -> this.parseCondition(cond, header))
-              .filter(obj -> obj != null)
-              .collect(Collectors.toList());
-    
-    // update rows matching the condition
+    // **🚀 3. 取得 `SET` 欄位的 index**
+    List<Integer> updateIndices = new ArrayList<>();
+    for (String column : updatesUpper.keySet()) {
+        int colIdx = headerUpper.indexOf(column);
+        if (colIdx == -1) {
+            System.out.println("[ERROR] Column " + column + " not found in table " + tableName);
+            return;
+        }
+        updateIndices.add(colIdx);
+    }
+
+    // **🚀 4. 遍歷資料，更新符合條件的行**
+    for (int i = 1; i < table.size(); i++) {
+        Map<String, String> row = new HashMap<>();
+        for (int j = 0; j < header.size(); j++) {
+            row.put(headerUpper.get(j), table.get(i).get(j)); // 轉成大寫比對
+        }
+
+        if (conditionTree == null || conditionTree.evaluate(row)) {
+            for (Map.Entry<String, String> entry : updatesUpper.entrySet()) {
+                int colIdx = headerUpper.indexOf(entry.getKey());
+                table.get(i).set(colIdx, entry.getValue());
+            }
+            System.out.println("[OK] Updated row: " + table.get(i));
+        }
+    }
+
+    // **🚀 5. 存回 `.tab` 檔案**
+    exportDataToTabFile(tableName);
+    System.out.println("[OK] Table " + tableName + " updated successfully.");
+}
+
+
+
+  public List<List<String>> whereQuery(ConditionNode conditionTree, List<List<String>> table, List<String> header, List<Integer> selectedIdx){
+    if(table.isEmpty()) return Collections.emptyList();
+
+    List<List<String>> result = new ArrayList<>();
+
+    // **🚀 1. 先加入篩選後的標題**
+    List<String> selectedHeader = selectedIdx.stream()
+            .map(header::get)  // 選擇原始標題
+            .collect(Collectors.toList());
+    result.add(selectedHeader);
+
+    int deleteIdx = header.indexOf("_DELETED");
+
     for(int i=1; i<table.size(); i++){
-      List<String> row = table.get(i);
-      boolean match = parsedConditions.stream().allMatch(cond -> compareValue(cond.operator, row.get(cond.columnIndex), cond.targetValue));
-    
-      if(match) {
-        System.out.println("Updating row: " + row);
-        row.set(colIdx, newValue);
+      if (deleteIdx != -1 && "TRUE".equalsIgnoreCase(table.get(i).get(deleteIdx))) {
+        continue; // skip deleted data.
       }
-    }
 
-    // save updated table
-    tables.put(tableName, table);
-    System.out.println("Table " + tableName + " updated successfully.");
+      List<String> currentRow = table.get(i);
+      Map<String, String> row = new HashMap<>();
+      for(int j=0; j< header.size(); j++){
+        row.put(header.get(j).toUpperCase(), currentRow.get(j));
+      }
+      System.out.println("row: "+row);
 
-  }
-
-  public boolean compareValue(String operator, String value1, String value2){
-    if(value1 == null || value2 == null) return false;
-    try {
-      double num1 = Double.parseDouble(value1);
-      double num2 = Double.parseDouble(value2);
-      return switch(operator){
-        case "==" -> num1 == num2;
-        case "!=" -> num1 != num2;
-        case ">" -> num1 > num2;
-        case "<" -> num1 < num2;
-        case ">=" -> num1 >= num2;
-        case "<=" -> num1 <= num2;
-        default -> false;
-      };
-
-    } catch(NumberFormatException e) {
-      return switch(operator){
-        case "==" -> value1.equals(value2);
-        case "!=" -> !value1.equals(value2);
-        case ">" -> value1.compareTo(value2) > 0;
-        case "<" -> value1.compareTo(value2) < 0;
-        case ">=" -> value1.compareTo(value2) >= 0;
-        case "<=" -> value1.compareTo(value2) <= 0;
-        default -> false;
-      };
-    }
-  }
-
-  public List<List<String>> whereQuery(List<String> con, List<List<String>> table, List<String> header, List<Integer> selectedIdx, boolean isOrCondtion){
-
-      // 分==|!=|>=|<=|>|<
-      List<QueryCondition> parsedConditions = con.stream()
-                .map(cond -> this.parseCondition(cond, header))
-                .filter(cond -> cond != null)
+      if(conditionTree.evaluate(row)){
+        List<String> selectedRow = selectedIdx.stream()
+                .map(idx -> currentRow.get(idx))
                 .collect(Collectors.toList());
-
-      System.out.println("parsedConditions" + parsedConditions);
-
-
-      List<List<String>> result = table.stream()
-                .skip(1)
-                .filter(row -> {
-                  System.out.println("row:"+row);
-                  
-                  return isOrCondtion ? parsedConditions.stream().anyMatch(cond -> compareValue(cond.operator, row.get(cond.columnIndex), cond.targetValue)) : parsedConditions.stream().allMatch(cond -> {
-                    System.out.println("cond.columnIndex: "+cond.columnIndex);
-                    System.out.println("compareValue(cond.operator, row.get(cond.columnIndex), cond.targetValue):"+compareValue(cond.operator, row.get(cond.columnIndex), cond.targetValue));
-                    return compareValue(cond.operator, row.get(cond.columnIndex), cond.targetValue);
-                  });
-                })
-                // .filter(row -> row.get(columnIndex).toString().equals(targetValue))
-                // .filter(row -> compareValue(operator,row.get(columnIndex), targetValue))
-                .map(row -> {
-                  return selectedIdx.stream().map(index -> row.get(index)).collect(Collectors.toList());
-                })
-                .collect(Collectors.toList());
-      System.out.println("result" + result);
-      
-
-      List<String> selectedHeader = selectedIdx.stream().map(index -> header.get(index)).collect(Collectors.toList());
-      result.add(0, selectedHeader);
-      return result;
-    // return Collections.emptyList();
+        result.add(selectedRow);
+      }
+      System.out.println("result: " + result);
+    }
+    return result;
   }
 
 
-  //TODO:test getData
-  /**
-   *   SELECT * FROM marks;
-   *    [OK]
-   * 
-   * col: ["name","age"] or ["*"]
-   * condition: WHERE name == "bob" or WHERE age > 18 or WHERE name like "bob";
-   */
-  public List<List<String>> getData(String tableName, List<String>selectedCols, Map<String, List<String>> condition){
-
-    System.out.println("condition: "+condition);
+  public List<List<String>> getTable(String tableName){
     loadTableData(tableName);
     _printTable(tableName);
-    List<List<String>> table = this.tables.get(tableName);
-    if(table == null || table.isEmpty()) return Collections.emptyList();
-
-    // uppercase on column
-    List<String> header = table.get(0).stream().map(column -> column.toString().toUpperCase()).collect(Collectors.toList()); 
-    System.out.println("header " + header);
-    List<Integer> selectedIdx = selectedCols.stream()
-                      .map(col -> header.indexOf(col.toUpperCase()))
-                      .filter(index -> index != -1)
-                      .collect(Collectors.toList());
-    System.out.println("selectedIdx" + selectedIdx);
-    if(selectedIdx.isEmpty()){
-      System.out.println("Selected columns not found.");
+    if(tables == null || !tables.containsKey(tableName)){
+      System.out.println("[ERROR] Table not found: " + tableName);
       return Collections.emptyList();
     }
-
-    if(condition.containsKey("condition") && !condition.get("condition").isEmpty()) {
-      List<String> con = condition.get("condition");
-      List<List<String>> result = this.whereQuery(con, table, header, selectedIdx,false);
-      String tabResult = result.stream()
-                .map(row -> String.join("\t", row))
-                .collect(Collectors.joining("\n"));
-      System.out.println(tabResult);
-    }
-
-    // FIXME: not correct
-    if(condition.containsKey("add") && !condition.get("add").isEmpty()){
-        List<String> con = condition.get("add");
-        List<List<String>> result = this.whereQuery(con, table, header, selectedIdx,false);
-        String tabResult = result.stream()
-                .map(row -> String.join("\t", row))
-                .collect(Collectors.joining("\n"));
-        System.out.println(tabResult);
-    }
-
-    // FIXME: not correct
-    if(condition.containsKey("or") && !condition.get("or").isEmpty()){
-        List<String> con = condition.get("or");
-        List<List<String>> result = this.whereQuery(con, table, header, selectedIdx,true);
-        String tabResult = result.stream()
-                .map(row -> String.join("\t", row))
-                .collect(Collectors.joining("\n"));
-        System.out.println(tabResult);
-    }
-
-    return Collections.emptyList();
+    return this.tables.get(tableName);
   }
 
 
-  private QueryCondition parseCondition(String condition, List<String> header){
-    Pattern pattern = Pattern.compile("\\s*(==|!=|>=|<=|>|<)\\s*");
-    Matcher matcher = pattern.matcher(condition);
-    if(!matcher.find()){
-      System.out.println("Invalid condition format: " + condition);
-      return null;
-    }
-    String columnName = condition.substring(0, matcher.start()).trim();
-    System.out.println("columnName " + columnName);
-    String operator = matcher.group(1);
-    System.out.println("operator " + operator);
-    String targetValue = condition.substring(matcher.end()).trim();
-    System.out.println("targetValue " + targetValue);
-
-    int columnIndex = header.indexOf(columnName);
-    if(columnIndex == -1){
-      System.out.println("Column not found: " + columnName);
-      return null;
-    }
-
-    QueryCondition queryCondition = new QueryCondition(columnName, operator, targetValue);
-    queryCondition.setColumnIndex(columnIndex);
-    return queryCondition;
-  }
-
-  
-  class QueryCondition {
-    String columnName, operator, targetValue;
-    int columnIndex;
-
-    QueryCondition(String columnName, String operator, String targetValue){
-      this.columnName = columnName;
-      this.operator = operator;
-      this.targetValue = targetValue;
-    }
-
-    void setColumnIndex(int index){
-      this.columnIndex = index;
-    }
-  }
 
 
   /* TODO:test joinData
@@ -539,10 +402,11 @@ public class Database {
 
   }
 
-  /*TODO:test deleteData
+  /*
+
    * DELETE FROM marks WHERE name == 'Sion';
   */
-  public void deleteData(String tableName, List<String> conditions){
+  public void deleteData(String tableName, ConditionNode conditionTree){
     // ensure table exists;
     loadTableData(tableName);
     _printTable(tableName);
@@ -553,29 +417,40 @@ public class Database {
 
     List<List<String>> table = tables.get(tableName);
     List<String> header = table.get(0);
-    List<QueryCondition> parsedConditions = conditions.stream()
-              .map(cond -> this.parseCondition(cond, header))
-              .filter(obj -> obj != null)
-              .collect(Collectors.toList());
 
-    List<List<String>> updatedTable = table.stream()
-              .filter(row -> row == header || parsedConditions.stream().noneMatch(cond -> compareValue(cond.operator, row.get(cond.columnIndex), cond.targetValue)))
-              .collect(Collectors.toList());
-
-
-    // check if any rows were deleted
-    if(updatedTable.size() == table.size()){
-      System.out.println("No matching records found to delete.");
-      return ;
+    int deleteIdx = header.indexOf("_DELETED");
+    if (deleteIdx == -1) {
+      System.out.println("[ERROR] Table " + tableName + " does not support deletion tracking.");
+      return;
     }
 
-    // save updated table
-    tables.put(tableName, updatedTable);
-    System.out.println("Rows matching condition deleted successfully.");
+    boolean updated = false;
+    for (int i = 1; i < table.size(); i++) {
+        Map<String, String> row = convertRowToMap(table.get(i), header);
+        if (conditionTree.evaluate(row)) {
+            table.get(i).set(deleteIdx, "TRUE"); // ✅ 標記刪除
+            updated = true;
+        }
+    }
+
+    if (updated) {
+      exportDataToTabFile(tableName);
+      System.out.println("[OK] Deleted matching rows from table " + tableName);
+    } else {
+        System.out.println("[INFO] No matching records found to delete.");
+    }
+
   }
 
+  public static Map<String, String> convertRowToMap(List<String> row, List<String> header){
+    Map<String, String> rowMap = new HashMap<>();
+    for(int i = 0; i < header.size(); i++){
+      rowMap.put(header.get(i).toUpperCase(), row.get(i));
+    }
+    return rowMap;
+  }
 
-  /* TODO:test dropTable
+  /* 
    * DROP TABLE marks;
    */
   public void dropTable(String tableName){
@@ -584,7 +459,6 @@ public class Database {
     if(tables.containsKey(tableName)){
       tables.remove(tableName);
     }
-    
     
     // 2. delete .tab file
     String fileName = String.format("databases/%s/%s.tab", dbName, tableName);
@@ -600,5 +474,4 @@ public class Database {
     }
     return ;
   }
-
 }

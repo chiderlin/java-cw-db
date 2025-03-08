@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.HashMap;
 import java.util.Collections;
 
@@ -81,140 +82,313 @@ public class DBServer {
         } else if(formatCommand.startsWith("INSERT ")){
             parseInsert(command);
 
-        } 
-        // else if(formatCommand.contains("WHERE")){
-        //     /**
-        //      * 有WHERE的處理順序為：
-        //      * 1. 取得是哪個tableName並where回來資料
-        //      * 2. 再判斷是要做什麼操作：UPDATE? SELECT? DELETE? 
-        //      * */ 
-        //     ParseQuery rs = parseWhere(command);
-        //     System.out.println("rs: "+rs);
-        // }
-        return "";
+        } else if(formatCommand.startsWith("UPDATE ")){
+            parseUpdate(command);
 
+        } else if(formatCommand.startsWith("ALTER ")){
+            parseAlter(command);
+
+        } else if(formatCommand.startsWith("DROP TABLE ")){
+            parsedropTable(command);
+        } else if(formatCommand.startsWith("DELETE FROM ")){
+            parseDeleteData(command);
+        }
+
+        return "";
+    }
+
+    public void parseDeleteData(String cmd){
+        if(db == null){
+            System.out.println("[ERROR] Switch database required.");
+            return ;
+        }
+
+        cmd = cmd.trim().replaceAll(";$","").trim();
+        if (!cmd.matches("(?i)^DELETE\\s+FROM\\s+.+\\s+WHERE\\s+.+$")) {
+            System.out.println("[ERROR] Invalid DELETE syntax.");
+            return;
+        }
+
+        String[] parts = cmd.split("(?i)WHERE");
+        String tableName = parts[0].replaceFirst("(?i)^DELETE\\s+FROM\\s+", "").trim();
+        String whereClause = parts[1].trim();
+
+        if (tableName.isEmpty()) {
+            System.out.println("[ERROR] Missing table name in DELETE FROM.");
+            return;
+        }
+
+        ConditionNode conditionTree = QueryParser.parseWhere(whereClause);
+        db.deleteData(tableName, conditionTree);
+
+    }
+
+    public void parsedropTable(String cmd){
+        if(db == null){
+            System.out.println("[ERROR] Switch database required.");
+            return ;
+        }
+
+        cmd = cmd.trim().replaceAll(";$","").trim();
+        if(!cmd.matches("(?i)^DROP\\s+TABLE\\s+.+$")){
+            System.out.println("[ERROR] Invalid DROP TABLE syntax.");
+            return ;
+        }
+        String tableName = cmd.replaceFirst("(?i)^DROP\\s+TABLE\\s+", "").trim();
+
+        if(tableName.isEmpty()){
+            System.out.println("[ERROR] Missing table name in DROP TABLE.");
+            return;
+        }
+
+        db.dropTable(tableName);
+    }
+
+
+    public void parseAlter(String cmd){
+
+    }
+
+
+    public void parseUpdate(String cmd){
+        if(db == null) {
+            System.out.println("[ERROR] Switch database required.");
+            return;
+        }
+
+        try {
+            // **🚀 1. 清理語法**
+            cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", ""); // 清理空格
+            if (!cmd.matches("(?i)^UPDATE\\s+\\w+\\s+SET\\s+.+\\s+WHERE\\s+.+$")) {
+                System.out.println("[ERROR] Invalid UPDATE syntax.");
+                return;
+            }
+
+            // **🚀 2. 拆解 `UPDATE` 語句**
+            String[] updateParts = cmd.split("(?i)\\s+SET\\s+", 2);
+            String tableName = updateParts[0].split("\\s+")[1].trim();
+            
+            // **🚀 3. 拆解 `SET` 部分**
+            String[] setWhereParts = updateParts[1].split("(?i)\\s+WHERE\\s+", 2);
+            String setClause = setWhereParts[0].trim();
+            String whereClause = setWhereParts.length > 1 ? setWhereParts[1].trim() : "";
+
+            // **🚀 4. 解析 `SET` 欄位**
+            Map<String, String> updates = new HashMap<>();
+            for (String setPart : setClause.split("\\s*,\\s*")) {
+                String[] keyValue = setPart.split("\\s*=\\s*");
+                if (keyValue.length != 2) {
+                    System.out.println("[ERROR] Invalid SET format: " + setPart);
+                    return;
+                }
+                updates.put(keyValue[0].trim(), keyValue[1].replaceAll("'", "").trim());
+            }
+
+            // **🚀 5. 解析 `WHERE` 條件**
+            ConditionNode conditionTree = null;
+            if (!whereClause.isEmpty()) {
+                conditionTree = QueryParser.parseWhere(whereClause);
+            }
+
+            // **🚀 6. 調用 `updateData`**
+            db.updateData(tableName, updates, conditionTree);
+
+        } catch (Exception e) {
+            System.out.println("[ERROR] parseUpdate: " + e.getMessage());
+        }
     }
 
     /**
-     * @param cmd
      * CREATE TABLE marks (name, mark, pass);
-     * 
      */
-    public void parseCreateTable(String cmd){
-        if(db == null) {
-            System.out.println("Switch database required.");
-            return ;
+    public void parseCreateTable(String cmd) {
+        if (db == null) {
+            System.out.println("[ERROR] Switch database required.");
+            return;
         }
-        String rawCmd = cmd.substring(13).trim(); //marks (name, mark, pass);
-        rawCmd.replace("\\);","").trim();
-        String[] parts = rawCmd.split("\\(",2);
-        String tableName = parts[0].trim();
-        String cols = parts[1].trim();
-        List<String> values = new ArrayList<>(Arrays.asList(cols.split(", ")));
-        System.out.println("values: "+ values);
-        Path path = Paths.get(storageFolderPath);
+    
+        // **🚀 1. 清理 `);` 確保語法正確**
+        String rawCmd = cmd.substring(13).trim().replaceAll("\\);$", "").trim(); // 確保 `);` 被移除
+    
+        // **🚀 2. 分割語法 -> `tableName` 和 `cols`**
+        String[] parts = rawCmd.split("\\(", 2);
+        if (parts.length < 2) {
+            System.out.println("[ERROR] Invalid CREATE TABLE syntax.");
+            return;
+        }
+    
+        String tableName = parts[0].trim(); // `marks`
+        String cols = parts[1].trim();      // `name, mark, pass`
+    
+        // **🚀 3. 確保 `tableName` 不為空**
+        if (tableName.isEmpty()) {
+            System.out.println("[ERROR] Table name missing in CREATE TABLE.");
+            return;
+        }
+    
+        // **🚀 4. 解析欄位名稱，去掉括號**
+        List<String> values = new ArrayList<>(Arrays.asList(cols.split("\\s*,\\s*")));
+    
+        // **🚀 5. 確保 `values` 不為空**
+        if (values.isEmpty() || values.get(0).isEmpty()) {
+            System.out.println("[ERROR] No columns specified in CREATE TABLE.");
+            return;
+        }
 
+    
+        // **🚀 6. 印出解析後的欄位**
+        System.out.println("Parsed columns: " + values); // ✅ 輸出 `[name, mark, pass]`
+        Path path = Paths.get(storageFolderPath);
         System.out.println(db.createTable(tableName, path, values));
     }
 
-    /*
-    sql優先會先執行and 再執行or (如果沒有特別括號的話)
-     * SELECT ID from people where name == "bob";
-     * SELECT ID from people where name == "bob" or age >  18 and age < 30;
-     * SELECT ID from people where name == "bob" and age >  18 or age < 30;
-     * SELECT ID from people where name == "bob" or age > 18;
-     * SELECT id,Name from sheds where name == "test";
-     */
-    public ParseQuery parseWhere(String cmd){
-        String[] queryParts = cmd.split("(?i)\\s+where\\s+", 2); //1.marks  2.name = \"bob\" or age < 18;";
-        if(queryParts.length < 2){
-            return new ParseQuery("ERROR",null ,Collections.emptyList(),Collections.emptyList());
-        }
-
-        String tableName = queryParts[0].split("(?i)\\s+from\\s+")[1].trim();
-        String whereClause = queryParts[1].replace(";","").trim(); // where name = \"bob\" or age < 18;";
-
-        List<String> andConditions = new ArrayList<>();
-        List<String> orConditions = new ArrayList<>();
-        List<String> condition = new ArrayList<>();
-
-
-
-        String[] conditions = whereClause.split("(?i)\\s+or\\s+"); //1.where name = \"bob\" 2.age < 18
-        System.out.println("conditions.length: "+conditions.length);
-        System.out.println("conditions: "+conditions[0]);
-        if(conditions.length == 1) {
-            // only one condition (no and/or)
-            condition.addAll(Arrays.asList(conditions));
-            return new ParseQuery(tableName, condition, Collections.emptyList(), Collections.emptyList());
-        } 
-
-
-        for(String orBlock:conditions){
-            String[] andParts = orBlock.split("(?i)\\s+and\\s+");
-
-            if(andParts.length >1) {
-                andConditions.addAll(Arrays.asList(andParts));
-            } else {
-                orConditions.add(andParts[0].trim());
+    
+    private void parseInsert(String cmd) {
+        try {
+            // **🚀 1. 清理語法**
+            cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", "");  // 清理多餘空格 & `;`
+            if (!cmd.matches("(?i)^INSERT INTO\\s+\\w+\\s+VALUES\\s*\\(.*\\)$")) {
+                System.out.println("[ERROR] Invalid INSERT syntax.");
+                return;
             }
+    
+            // **🚀 2. 解析 table name**
+            String[] parts = cmd.split("(?i)VALUES", 2);
+            String tableName = parts[0].replaceFirst("(?i)^INSERT INTO\\s+", "").trim();
+    
+            // **🚀 3. 解析 values (去除括號)**
+            String valuesPart = parts[1].trim();
+            valuesPart = valuesPart.replaceAll("^\\(|\\)$", "");  // 移除頭尾括號
+            
+            List<String> values = Arrays.stream(valuesPart.split("\\s*,\\s*"))
+                                        .map(value -> value.replaceAll("^'(.*)'$", "$1").trim()) // 去除單引號
+                                        .map(value -> value.equalsIgnoreCase("null") ? "" : value) // NULL 轉成空字串
+                                        .collect(Collectors.toList());
+    
+            // **🚀 4. 執行插入**
+            db.insertData(tableName, values);
+    
+        } catch (Exception e) {
+            System.out.println("[ERROR] parseInsert: " + e.getMessage());
         }
-
-        // type: SELECT/UPDATE/DELETE
-        // 可能有多個filer, 用List<>: condition:(WHERE) (columnName) (symbol) (filter) 
-        return new ParseQuery(tableName, Collections.emptyList(), andConditions, orConditions);
     }
+    
 
-
-    //TODO:parseInsert
-    private void parseInsert(String cmd){
-
-    }
-
-    /*
-     * (1)SELECT * from marks;
-     * (2)SELECT name, age from marks;
-     * (3)SELECT ID from people where name == "bob";
-     * (4)SELECT ID from people where name == "bob" or age >  18 and age < 30;
-     *    SELECT ID from people where name == "bob" and age >  18 or age < 30;
-     *    SELECT ID from people where name == "bob" or age >  18;
-     * SELECT ID from people where name == "Bob" or age < 18;
-     * SELECT id,name from sheds where name == "Dorchester";
-     */
     private void parseSelect(String cmd){
         if(db == null) {
-            System.out.println("Switch database required.");
-            return ;
+            System.out.println("[ERROR] Switch database required.");
+            return;
         }
-        String[] cmds = cmd.split("(?i)FROM"); // SELECT *, marks where name == "bob";
-        ParseQuery result = parseWhere(cmd);
-        System.out.println("tablename: "+ result.tableName);
-        System.out.println("and: "+ result.and);
-        System.out.println("or: "+ result.or);
-        System.out.println("condition: "+ result.condition);
+    
+        try {
+            // **🚀 1. 清理語法**
+            cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", ""); // 清理多餘空格 & `;`
+            
+            if (!cmd.matches("(?i)^SELECT\\s+.+\\s+FROM\\s+.+")) {
+                System.out.println("[ERROR] Invalid SELECT syntax.");
+                return;
+            }
+        
+            // **🚀 2. 拆解 SELECT 語法**
+            String[] cmds = cmd.split("(?i)FROM");
+            if (cmds.length < 2 || cmds[1].trim().isEmpty()) {
+                System.out.println("[ERROR] Missing FROM table name.");
+                return;
+            }
+        
+            // **🚀 3. 獲取 tableName**
+            String[] tableParts = cmds[1].split("(?i)WHERE", 2);
+            String tableName = tableParts[0].trim();
+            if (tableName.isEmpty()) {
+                System.out.println("[ERROR] Table name missing after FROM.");
+                return;
+            }
+        
+            // **🚀 4. 確保 Table 存在**
+            List<List<String>> table = db.getTable(tableName);
+            if (table.isEmpty()) {
+                System.out.println("[ERROR] Table " + tableName + " does not exist.");
+                return;
+            }
+        
+            // **🚀 5. 確保 SELECT 欄位**
+            String queryCol = cmds[0].replaceFirst("(?i)^SELECT\\s*", "").trim();
+            if (queryCol.isEmpty()) {
+                System.out.println("[ERROR] Missing column names after SELECT.");
+                return;
+            }
+        
+            // **🚀 6. 取得 Header（轉大寫用於比對，但回傳原始大小寫）**
+            List<String> header = table.get(0);
+            Map<String, String> columnMap = new HashMap<>(); // 用來映射大小寫
+        
+            for (String col : header) {
+                columnMap.put(col.toUpperCase(), col); // 轉大寫當 key，原始欄位當 value
+            }
+        
+            List<String> selectedCols;
+            if (queryCol.equals("*")) {
+                selectedCols = new ArrayList<>(header);  // 選擇所有欄位
+            } else {
+                selectedCols = Arrays.stream(queryCol.split("\\s*,\\s*"))
+                        .map(col -> columnMap.getOrDefault(col.toUpperCase(), col)) // 找到對應的原始欄位名稱
+                        .collect(Collectors.toList());
+            }
+            selectedCols.remove("_DELETED");
+            System.out.println("selectedCols: " + selectedCols);
+        
+            // **🚀 7. 解析 WHERE 條件**
+            ConditionNode conditionTree = null;
+            if (tableParts.length > 1) {
+                String whereClause = tableParts[1].trim();
+                if (!whereClause.matches("(?i).+\\s*(==|!=|>|<|>=|<=|LIKE)\\s*.+")) {
+                    System.out.println("[ERROR] Invalid WHERE condition syntax.");
+                    return;
+                }
+                conditionTree = QueryParser.parseWhere(whereClause);
+            }
+        
+            // **🚀 8. 找出選擇的欄位索引**
+            List<Integer> selectIdx = selectedCols.stream()
+                .map(col -> header.indexOf(col)) // 找到原始欄位名稱的索引
+                .filter(index -> index != -1)
+                .collect(Collectors.toList());
+        
+
+            // **🚀 9. 執行條件篩選**
+            int deleteIdx = header.indexOf("_DELETED");
+            List<List<String>> filteredTable = new ArrayList<>();
+            filteredTable.add(selectedCols); // 加入標題
+    
+            for (int i = 1; i < table.size(); i++) {
+                List<String> row = table.get(i);
+                if (deleteIdx != -1 && "TRUE".equalsIgnoreCase(row.get(deleteIdx))) {
+                    continue; // ✅ **跳過 `_DELETED = TRUE` 的行**
+                }
+    
+                Map<String, String> rowMap = Database.convertRowToMap(row, header);
+                if (conditionTree == null || conditionTree.evaluate(rowMap)) {
+                    List<String> selectedRow = selectIdx.stream()
+                            .map(row::get)
+                            .collect(Collectors.toList());
+                    filteredTable.add(selectedRow);
+                }
+            }
 
 
-        // String tableName = cmds[1].trim();
-        String tableName = result.tableName;
-        Map<String, List<String>> conditions = new HashMap<>();
-        conditions.put("and", result.and);
-        conditions.put("or", result.or);
-        conditions.put("condition", result.condition);
-
-
-        // cmds[0] // "SELECT * "
-        String queryCol = cmds[0].replaceFirst("^(?i)SELECT\\s*", "").trim(); //* or "name, age"
-        String[] array = queryCol.split("\\s*,\\s*"); // separate ,
-        List<String> cols = Arrays.asList(array);
-        System.out.println("cols: "+ cols);
-        if(conditions.size() == 0){
-            db.getData(tableName, cols, null);
-            return ;
+            // **🚀 11. 輸出結果**
+            String tableResult = filteredTable.stream()
+                .map(row -> String.join("\t", row))
+                .collect(Collectors.joining("\n"));
+        
+            System.out.println(tableResult);
+        
+        } catch (Exception e) {
+            System.out.println("[ERROR] parseSelect: " + e.getMessage());
         }
-        db.getData(tableName, cols, conditions);
-
+        
     }
-
+    
     
     public String createDatabase(String dbName){
         if(db == null) {
@@ -321,20 +495,5 @@ public class DBServer {
                 writer.flush();
             }
         }
-    }
-}
-
-
-class ParseQuery {
-    String tableName;
-    List<String> condition;
-    List<String> and;
-    List<String> or;
-
-    ParseQuery(String tableName, List<String> condition ,List<String> andConditions, List<String>orConditions){
-        this.tableName = tableName;
-        this.condition = condition;
-        this.and = andConditions;
-        this.or = orConditions;
     }
 }
