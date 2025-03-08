@@ -116,42 +116,16 @@ public class Database {
 
   /**
    * read tab file in memory (data structure)
-   * 先把tab資料全部視為string, 之後用query再分load進來的類型？？
   */
   public void loadTableData(String tableName){
     try {
-        String fileName = String.format("databases/%s/%s.tab", dbName, tableName);
-        File fileToOpen = new File(fileName);
-        if(!fileToOpen.exists()){
-          System.out.println("File not found: "+ fileName);
-          return ;
-        }
+      TableIO tableIO = new TableIO(this.dbName, tableName);
+      List<List<String>> tableData = tableIO.loadFile();
+      tables.put(tableName, tableData);
 
-        FileReader reader = new FileReader(fileToOpen);
-        BufferedReader buffReader = new BufferedReader(reader);
-        String lineData = buffReader.readLine();
-
-        if(lineData == null){
-          System.out.println("File is empty " + fileName);
-          buffReader.close();
-          return ;
-        }
-
-        List<String> tableColumn = new ArrayList<>(Arrays.asList(lineData.split("\t")));
-        List<List<String>> rowdataArr = new ArrayList<>();
-        rowdataArr.add(tableColumn);
-
-        while((lineData = buffReader.readLine()) != null){
-          rowdataArr.add(Arrays.asList(lineData.split("\t")));
-        }
-        
-        tables.put(tableName, rowdataArr);
-        buffReader.close();
-        System.out.println("loadTableData successful");
-        // System.out.println(tables); //rs: {sheds=[[id, Name, Height, PurchaserID], [1, Dorchester, 1800, 3], [2, Plaza, 1200, 1], [3, Excelsior, 1000, 2]]}
-
-    } catch(IOException e){
-        System.err.println(e.getMessage());
+    } catch(Exception e){
+      System.err.println("[ERROR] " + e.getMessage());
+      return ;
     }
   }
 
@@ -189,7 +163,8 @@ public class Database {
     }
 
     String data = String.join("\t",values);
-    writeFile(tableName, data);
+    TableIO tableIO = new TableIO(this.dbName, tableName);
+    tableIO.writeFile(data, false);
 
     return "[OK]";
   }
@@ -202,7 +177,13 @@ public class Database {
 
 
   public void insertData(String tableName, List<String>values){
+    loadTableData(tableName);
+    _printTable(tableName);
     List<List<String>> table = this.tables.get(tableName);
+    if(table == null) {
+      System.out.println("Table not found: " + tableName);
+      return ;
+    }
     List<String> newData = new ArrayList<String>();
     String id = this.getNewId(table);
     newData.add(id);
@@ -214,43 +195,25 @@ public class Database {
 
 
   public void exportDataToTabFile(String tableName){
-    List<List<String>> table = tables.get(tableName);
-    if(table == null){
-      System.out.println("Table not found: " + tableName);
+    if(tables == null || !tables.containsKey(tableName)){
+      System.out.println("[ERROR] Table not found: " + tableName);
       return ;
     }
-
+    
+    List<List<String>> table = tables.get(tableName);
     StringBuilder fileContent = new StringBuilder();
     for(List<String> rowData: table){
-      String rowDataStr = rowData.stream().map(String::toString).collect(Collectors.joining("\t"));
-      System.out.println(rowDataStr);
+      String rowDataStr = String.join("\t", rowData);
+      // System.out.println(rowDataStr);
       fileContent.append(rowDataStr).append("\n");
     }
 
-    this.writeFile(tableName, fileContent.toString());
+    TableIO tableIO = new TableIO(this.dbName, tableName);
+    tableIO.writeFile(fileContent.toString(), false);
   }
 
 
-  public void writeFile(String tableName, String data){
-    if(this.dbName == null) return;
-    String fileName = String.format("databases/%s/%s.tab", this.dbName, tableName); //TODO: 有更好寫法？
-    File fileToOpen = new File(fileName);
-    try {
-      if(!fileToOpen.exists()){
-        fileToOpen.createNewFile();
-      }
 
-      // try-with-resources -> close pipe automatically when finishing
-      try(BufferedWriter buffWriter = new BufferedWriter(new FileWriter(fileToOpen))){
-        buffWriter.write(data);
-      }
-
-      System.out.println("write file successfully.");
-
-    } catch(IOException e){
-      System.err.println(e.getMessage());
-    }
-  }
 
 
   //TODO:Test updateData
