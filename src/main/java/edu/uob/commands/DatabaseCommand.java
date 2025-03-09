@@ -15,13 +15,17 @@ public class DatabaseCommand extends DBCommand{
     String formatCommand = this.cmd.trim().toUpperCase();
 
     if (formatCommand.startsWith("USE ")) {
-      return dbManager.useDatabase(formatCommand.substring(4).trim());
+        return dbManager.useDatabase(cmd.substring(4).trim());
 
     } else if (formatCommand.startsWith("DROP DATABASE ")) {
-        return dbManager.dropDatabase(formatCommand.substring(14).trim());
+        return dbManager.dropDatabase(cmd.substring(14).trim());
 
     } else if (formatCommand.startsWith("SHOW DATABASES")) {
         return dbManager.showDatabase();
+
+    } else if(formatCommand.startsWith("CREATE DATABASE ")){
+        return dbManager.createDatabase(cmd.substring(16).trim());
+
     }
 
     return "[ERROR] Invalid database command.";

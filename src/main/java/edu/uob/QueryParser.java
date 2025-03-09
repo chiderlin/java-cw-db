@@ -8,7 +8,9 @@ public class QueryParser {
         String formatCommand = rawCommand.trim().toUpperCase();
         if (formatCommand.startsWith("USE ") ||
           formatCommand.startsWith("DROP DATABASE ") ||
-          formatCommand.startsWith("SHOW DATABASES")) {
+          formatCommand.startsWith("SHOW DATABASES") ||
+          formatCommand.startsWith("CREATE DATABASE ")
+          ) {
           return new DatabaseCommand(dbManager, rawCommand);
         }
         
