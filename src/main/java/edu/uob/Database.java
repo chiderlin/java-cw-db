@@ -31,6 +31,7 @@ public class Database {
   private String dbName;
   private List<String> tableColumn = new ArrayList<>();
   private HashMap<String, List<List<String>>> tables = new HashMap<>(); // type 2
+  private Cache tableCache;
   /**
    * tables = {
    *  users:[[1,'bob',21,'bob@bob.net'],[2,'bob',21,'bob@bob.net'],[1,'bob',21,'bob@bob.net']]
@@ -41,6 +42,7 @@ public class Database {
 
   public Database(String dbName){
     this.dbName = dbName;
+    this.tableCache = new Cache();
   }
 
   public static void main(String args[]) {
@@ -82,9 +84,20 @@ public class Database {
   */
   public void loadTableData(String tableName){
     try {
+      // First check if the table is in cache
+      // List<List<String>> cachedData = tableCache.get(tableName);
+      // if (cachedData != null) {
+      //   tables.put(tableName, cachedData);
+      //   return;
+      // }
+
+      // If not in cache, load from file
       TableIO tableIO = new TableIO(this.dbName, tableName);
       List<List<String>> tableData = tableIO.loadFile();
       tables.put(tableName, tableData);
+      
+      // Add to cache
+      // tableCache.add(tableName, tableData);
 
     } catch(Exception e){
       System.err.println("[ERROR] " + e.getMessage());
@@ -157,6 +170,10 @@ public class Database {
     // add into table
     table.add(newData);
     this.exportDataToTabFile(tableName);
+    
+    // Update cache
+    // tableCache.invalidate(tableName);
+    // tableCache.add(tableName, table);
   }
 
 
@@ -185,7 +202,7 @@ public class Database {
 
 
 
-  //TODO:Test updateData
+  //
   /**
    *   UPDATE marks SET age = 35 WHERE name == 'Simon';
    *   UPDATE test SET age = 35, City= 'Frankfurt' WHERE age < 18;
@@ -298,7 +315,7 @@ public class Database {
 
 
 
-  /* TODO:test joinData
+  /* 
    * 
    * JOIN coursework AND marks ON submission AND id;
    * 
@@ -306,53 +323,77 @@ public class Database {
    * List<List<String>> result = joinData("coursework", "marks", "marksId", "id");
    */
   public List<List<String>> joinData(String table1Name, String table2Name, String table1JoinCol, String table2JoinCol){
+    System.out.println("table1Name: " + table1Name);
+    System.out.println("table2Name: " + table2Name);
+    System.out.println("table1JoinCol: " + table1JoinCol);
+    System.out.println("table2JoinCol: " + table2JoinCol);
+    loadTableData(table1Name);
+    loadTableData(table2Name);
     if(!tables.containsKey(table1Name) || !tables.containsKey(table2Name)){
-      System.out.println("One or both tables do not exist.");
-      return Collections.emptyList();
+        System.out.println("One or both tables do not exist.");
+        return Collections.emptyList();
     }
 
     List<List<String>> table1 = tables.get(table1Name);
     List<List<String>> table2 = tables.get(table2Name);
 
-    // Get header from both tables;
+    // Get headers from both tables
     List<String> header1 = table1.get(0);
     List<String> header2 = table2.get(0);
 
-    
-    // find the index of the join col in both tables.
+    // 找到 JOIN 欄位的索引
     int joinIdx1 = header1.indexOf(table1JoinCol);
     int joinIdx2 = header2.indexOf(table2JoinCol);
 
     if(joinIdx1 == -1 || joinIdx2 == -1) {
-      System.out.println("Join column not found in one or both tables.");
-      return Collections.emptyList();
+        System.out.println("[ERROR] Join column not found in one or both tables.");
+        return Collections.emptyList();
     }
 
-    //create the joined header
-    List<String> joinedHeader = new ArrayList<>(header1);
+    // **🚀 過濾掉 _DELETED 為 TRUE 的行**
+    List<List<String>> filteredTable1 = table1.stream()
+            .filter(row -> row == header1 || !row.get(header1.indexOf("_DELETED")).equalsIgnoreCase("TRUE"))
+            .collect(Collectors.toList());
+
+    List<List<String>> filteredTable2 = table2.stream()
+            .filter(row -> row == header2 || !row.get(header2.indexOf("_DELETED")).equalsIgnoreCase("TRUE"))
+            .collect(Collectors.toList());
+
+    // **🚀 準備 JOIN 的標題，去掉 _DELETED**
+    List<String> joinedHeader = new ArrayList<>();
+    joinedHeader.addAll(header1);
     joinedHeader.addAll(header2);
+    joinedHeader.remove("_DELETED");
+    joinedHeader.remove("_DELETED");
 
-    // create a list to store the joined rows
     List<List<String>> joinedTable = new ArrayList<>();
-    joinedTable.add(joinedHeader);
+    joinedTable.add(joinedHeader); // 加入過濾後的標題
 
-    // perform the join
-    for(int i=1; i< table1.size(); i++){ // skip header row
-      List<String> row1 = table1.get(i);
-      for(int j=1; j< table2.size(); j++){
-        List<String> row2 = table2.get(j);
-        if(row1.get(joinIdx1).equals(row2.get(joinIdx2))){ // watching rows
-          List<String> joinedRow = new ArrayList<>(row1);
-          joinedRow.addAll(row2);
-          joinedTable.add(joinedRow);
+    // **🚀 執行 JOIN**
+    for(int i = 1; i < filteredTable1.size(); i++){ // 跳過標題行
+        List<String> row1 = filteredTable1.get(i);
+        for(int j = 1; j < filteredTable2.size(); j++){
+            List<String> row2 = filteredTable2.get(j);
+            if(row1.get(joinIdx1).equals(row2.get(joinIdx2))){ // 找到匹配行
+                List<String> joinedRow = new ArrayList<>();
+                joinedRow.addAll(row1);
+                joinedRow.addAll(row2);
+                
+                // **🚀 去除 _DELETED 欄位**
+                joinedRow.remove(header1.indexOf("_DELETED"));
+                joinedRow.remove(header2.indexOf("_DELETED"));
+
+                joinedTable.add(joinedRow);
+            }
         }
-      }
     }
+
     return joinedTable;
-  }
+}
 
 
-  /* TODO:test alterData
+
+  /* 
    * add col or drop col
    * ALTER TABLE marks ADD age;
    * ALTER TABLE marks DROP pass;
@@ -478,24 +519,25 @@ public class Database {
    * DROP TABLE marks;
    */
   public void dropTable(String tableName){
+    // Remove from cache first
+    // tableCache.invalidate(tableName);
     
-    // 1. clean tables obj{} data
-    if(tables.containsKey(tableName)){
+    // Remove from tables object
+    if(tables.containsKey(tableName)) {
       tables.remove(tableName);
     }
     
-    // 2. delete .tab file
+    // Delete .tab file
     String fileName = String.format("databases/%s/%s.tab", dbName, tableName);
     File file = new File(fileName);
-    if(!file.exists()){
-      System.out.println("File not found: "+ fileName);
-      return ;
+    if(!file.exists()) {
+      System.out.println("File not found: " + fileName);
+      return;
     }
-    if(file.delete()){
+    if(file.delete()) {
       System.out.println("Table '" + tableName + "' removed successfully.");
     } else {
       System.out.println("Failed to delete file: " + tableName);
     }
-    return ;
   }
 }

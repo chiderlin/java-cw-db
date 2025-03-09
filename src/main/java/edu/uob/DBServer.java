@@ -92,11 +92,58 @@ public class DBServer {
             parsedropTable(command);
         } else if(formatCommand.startsWith("DELETE FROM ")){
             parseDeleteData(command);
+        } else if(formatCommand.startsWith("JOIN ")){
+            parseJoin(command);
         }
 
         return "";
     }
 
+    /**
+     * JOIN coursework AND marks ON submission AND id;
+     */
+    public void parseJoin(String cmd){
+        if(db == null){
+            System.out.println("[ERROR] Switch database required.");
+            return ;
+        }
+
+        try{
+            cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", ""); 
+
+            if (!cmd.matches("(?i)^JOIN\\s+\\w+\\s+AND\\s+\\w+\\s+ON\\s+\\w+\\s+AND\\s+\\w+$")) {
+                System.out.println("[ERROR] Invalid JOIN syntax.");
+                return;
+            }
+    
+            String[] parts = cmd.split(" (?i)AND ");  // 按 `AND` 拆分
+            if (parts.length != 3) {
+                System.out.println("[ERROR] Invalid JOIN syntax.");
+                return;
+            }
+    
+            String table1Name = parts[0].split("(?i)JOIN ")[1].trim();
+            String table2Name = parts[1].split("(?i)ON ")[0].trim();
+            String table1JoinCol = parts[1].split("(?i)ON ")[1].trim();
+            String table2JoinCol = parts[2].trim();
+    
+            List<List<String>> result = db.joinData(table1Name, table2Name, table1JoinCol, table2JoinCol);
+    
+            if (result.isEmpty()) {
+                System.out.println("[ERROR] No matching rows found for JOIN.");
+                return;
+            }
+    
+            String resultString = result.stream()
+            .map(row -> String.join("\t", row))
+            .collect(Collectors.joining("\n"));
+            System.out.println(resultString);
+        } catch(Exception e){
+            System.out.println("[ERROR] parseJoin: " + e.getMessage());
+        }
+    }
+
+    
     public void parseDeleteData(String cmd){
         if(db == null){
             System.out.println("[ERROR] Switch database required.");

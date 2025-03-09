@@ -60,7 +60,7 @@ public class TableIO {
 
 
   public void writeFile(String data, boolean append){
-  String fileName = String.format("databases/%s/%s.tab", this.dbName, this.tableName); //TODO: 有更好寫法？
+  String fileName = String.format("databases/%s/%s.tab", this.dbName, this.tableName);
   File fileToOpen = new File(fileName);
   try {
     if(!fileToOpen.exists()){
