@@ -165,17 +165,20 @@ public class Database {
       System.out.println("[ERROR] Table not found: " + tableName);
       return ;
     }
-    
-    List<List<String>> table = tables.get(tableName);
-    StringBuilder fileContent = new StringBuilder();
-    for(List<String> rowData: table){
-      String rowDataStr = String.join("\t", rowData);
-      // System.out.println(rowDataStr);
-      fileContent.append(rowDataStr).append("\n");
+    try {
+      List<List<String>> table = tables.get(tableName);
+      StringBuilder fileContent = new StringBuilder();
+      for(List<String> rowData: table){
+        String rowDataStr = String.join("\t", rowData);
+        // System.out.println(rowDataStr);
+        fileContent.append(rowDataStr).append("\n");
+      }
+  
+      TableIO tableIO = new TableIO(this.dbName, tableName);
+      tableIO.writeFile(fileContent.toString(), false);
+    } catch(Exception e){
+      System.err.println("[ERROR] exportDataToTabFile: " + e.getMessage());
     }
-
-    TableIO tableIO = new TableIO(this.dbName, tableName);
-    tableIO.writeFile(fileContent.toString(), false);
   }
 
 
@@ -355,6 +358,9 @@ public class Database {
    * ALTER TABLE marks DROP pass;
   */
   public void alterData(String tableName, String action, String columnName){
+    loadTableData(tableName);
+    _printTable(tableName);
+
     if(!tables.containsKey(tableName)){
       System.out.println("Table " + tableName + "does not exist.");
       return ;
@@ -370,16 +376,34 @@ public class Database {
       // Add column to header 
       header.add(columnName);
       System.out.println("Column " + columnName + " added successfully.");
-
+      System.out.println("header: " + header);
       // Add default empty values to existing rows;
       for(int i=1; i<table.size(); i++){
-        table.get(i).add(""); // add an empty string as the default value;
+        if(table.get(i) == null){
+          continue;
+        }
+        try {
+          table.set(i, new ArrayList<>(table.get(i))); // Immutable List turn it to ArrayList, so we can add value
+          table.get(i).add(" "); // add an empty string as the default value;
+          System.out.println(" table.get(i) " +   table.get(i));
+          System.out.println(" table.get(i) " +   table.get(i).size());
+
+        } catch(Exception e){
+          System.err.println("[ERROR] Failed to add column to row " + i + ": " + e.getMessage());
+          continue;
+        }
       }
+
     } else if ("DROP".equalsIgnoreCase(action)){
       int colIdx = header.indexOf(columnName);
       if(colIdx == -1){
         System.out.println("Column " + columnName + " does not exist in table " + tableName);
         return ;
+      }
+
+      if (columnName.equalsIgnoreCase("ID") || columnName.equalsIgnoreCase("_DELETED")) {
+        System.out.println("[ERROR] Cannot drop primary key 'ID' or system column '_DELETED'.");
+        return;
       }
 
       //Remove col from header
@@ -399,7 +423,7 @@ public class Database {
     // save updated table
     table.set(0, header);
     tables.put(tableName, table);
-
+    exportDataToTabFile(tableName);
   }
 
   /*

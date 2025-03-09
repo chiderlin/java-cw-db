@@ -146,7 +146,27 @@ public class DBServer {
 
 
     public void parseAlter(String cmd){
+        if(db == null){
+            System.out.println("[ERROR] Switch database required.");
+            return;
+        }
+        try{
+            cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", "");
+            if (!cmd.matches("(?i)^ALTER TABLE\\s+\\w+\\s+(ADD|DROP)\\s+\\w+$")) {
+                System.out.println("[ERROR] Invalid ALTER TABLE syntax.");
+                return;
+            }
+            String[] parts = cmd.split(" ");
+            String tableName = parts[2];
+            String action = parts[3];
+            String columnName = parts[4];
+            System.out.println("parts: "+parts[4]);
+            db.alterData(tableName, action, columnName);
 
+
+        }catch(Exception e){
+            System.out.println("[ERROR] parseAlter: " + e.getMessage());
+        }
     }
 
 
