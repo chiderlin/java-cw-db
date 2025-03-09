@@ -53,7 +53,6 @@ public class TableIO {
   }
 
 
-
   public void writeFile(String tableName, String data, boolean append){
   String fileName = String.format("databases/%s/%s.tab", this.dbName, tableName);
   File fileToOpen = new File(fileName);

@@ -1,7 +1,5 @@
 package edu.uob.commands;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,10 +29,7 @@ public class TableCommand extends DBCommand {
         return "[ERROR] Switch database required.";
     }
 
-    // **🚀 1. 清理 `);` 確保語法正確**
-    String rawCmd = cmd.substring(13).trim().replaceAll("\\);$", "").trim(); // 確保 `);` 被移除
-
-    // **🚀 2. 分割語法 -> `tableName` 和 `cols`**
+    String rawCmd = cmd.substring(13).trim().replaceAll("\\);$", "").trim();
     String[] parts = rawCmd.split("\\(", 2);
     if (parts.length < 2) {
         System.err.println("[ERROR] Invalid CREATE TABLE syntax.");
@@ -44,24 +39,20 @@ public class TableCommand extends DBCommand {
     String tableName = parts[0].trim(); // `marks`
     String cols = parts[1].trim();      // `name, mark, pass`
 
-    // **🚀 3. 確保 `tableName` 不為空**
     if (tableName.isEmpty()) {
         System.err.println("[ERROR] Table name missing in CREATE TABLE.");
         return "[ERROR] Table name missing in CREATE TABLE.";
     }
 
-    // **🚀 4. 解析欄位名稱，去掉括號**
+    // remove ()
     List<String> values = new ArrayList<>(Arrays.asList(cols.split("\\s*,\\s*")));
 
-    // **🚀 5. 確保 `values` 不為空**
     if (values.isEmpty() || values.get(0).isEmpty()) {
         System.err.println("[ERROR] No columns specified in CREATE TABLE.");
         return "[ERROR] No columns specified in CREATE TABLE.";
     }
 
-
-    // **🚀 6. 印出解析後的欄位**
-    System.out.println("Parsed columns: " + values); // ✅ 輸出 `[name, mark, pass]`
+    System.out.println("Parsed columns: " + values);
     return db.createTable(tableName, values);
 }
 

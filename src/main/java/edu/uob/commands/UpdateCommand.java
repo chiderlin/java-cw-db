@@ -20,23 +20,22 @@ public class UpdateCommand extends DBCommand {
       }
 
       try {
-          // **🚀 1. 清理語法**
           cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", ""); // 清理空格
           if (!cmd.matches("(?i)^UPDATE\\s+\\w+\\s+SET\\s+.+\\s+WHERE\\s+.+$")) {
               System.err.println("[ERROR] Invalid UPDATE syntax.");
               return "[ERROR] Invalid SELECT syntax.";
           }
 
-          // **🚀 2. 拆解 `UPDATE` 語句**
+          // UPDATE syntax
           String[] updateParts = cmd.split("(?i)\\s+SET\\s+", 2);
           String tableName = updateParts[0].split("\\s+")[1].trim();
           
-          // **🚀 3. 拆解 `SET` 部分**
+          // SET syntax
           String[] setWhereParts = updateParts[1].split("(?i)\\s+WHERE\\s+", 2);
           String setClause = setWhereParts[0].trim();
           String whereClause = setWhereParts.length > 1 ? setWhereParts[1].trim() : "";
 
-          // **🚀 4. 解析 `SET` 欄位**
+          // SET value
           Map<String, String> updates = new HashMap<>();
           for (String setPart : setClause.split("\\s*,\\s*")) {
               String[] keyValue = setPart.split("\\s*=\\s*");
@@ -47,13 +46,12 @@ public class UpdateCommand extends DBCommand {
               updates.put(keyValue[0].trim(), keyValue[1].replaceAll("'", "").trim());
           }
 
-          // **🚀 5. 解析 `WHERE` 條件**
+          // handle WHERE condition
           ConditionNode conditionTree = null;
           if (!whereClause.isEmpty()) {
               conditionTree = QueryParser.parseWhere(whereClause);
           }
 
-          // **🚀 6. 調用 `updateData`**
           return db.updateData(tableName, updates, conditionTree);
 
       } catch (Exception e) {

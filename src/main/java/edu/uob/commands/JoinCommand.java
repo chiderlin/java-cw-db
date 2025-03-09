@@ -24,7 +24,7 @@ public class JoinCommand extends DBCommand {
             return "[ERROR] Invalid JOIN syntax.";
         }
 
-        String[] parts = cmd.split(" (?i)AND ");  // 按 `AND` 拆分
+        String[] parts = cmd.split(" (?i)AND ");  // split by AND
         if (parts.length != 3) {
             System.err.println("[ERROR] Invalid JOIN syntax.");
             return "[ERROR] Invalid JOIN syntax.";

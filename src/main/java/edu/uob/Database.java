@@ -1,8 +1,6 @@
 package edu.uob;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -70,21 +68,11 @@ public class Database {
   */
   public void loadTableData(String tableName){
     try {
-      // First check if the table is in cache
-      // List<List<String>> cachedData = tableCache.get(tableName);
-      // if (cachedData != null) {
-      //   tables.put(tableName, cachedData);
-      //   return;
-      // }
 
-      // If not in cache, load from file
       TableIO tableIO = new TableIO(this.dbName);
       List<List<String>> tableData = tableIO.loadFile(tableName);
       tables.put(tableName, tableData);
       
-      // Add to cache
-      // tableCache.add(tableName, tableData);
-
     } catch(Exception e){
       System.err.println("[ERROR] " + e.getMessage());
       return ;
@@ -112,30 +100,28 @@ public class Database {
     if (dbName == null || dbName.isEmpty() || tableName == null || tableName.isEmpty()) {
       return "[ERROR] Database name or table name is missing.";
     }
-    // 確保資料庫目錄存在
+    
     File dbDir = new File("databases" + File.separator + dbName);
     if (!dbDir.exists()) {
         return "[ERROR] Database not found: " + dbName;
     }
 
-    // 檢查 tableName 是否合法（不能包含特殊字元）
+    // valid tableName
     if (!tableName.matches("[a-zA-Z0-9_]+")) {
         return "[ERROR] Invalid table name. Only letters, numbers, and underscores are allowed.";
     }
 
-    // 檢查 table 是否已存在
     File tableFile = new File(dbDir, tableName + ".tab");
     if (tableFile.exists()) {
         return "[ERROR] Table " + tableName + " already exists.";
     }
 
-    // 準備表格結構
     List<String> tableSchema = new ArrayList<>();
-    tableSchema.add("id"); // 自動遞增 ID
+    tableSchema.add("id"); 
     tableSchema.addAll(values);
-    tableSchema.add("_DELETED"); // 軟刪除標記
+    tableSchema.add("_DELETED"); // delete tag
 
-    // 把 schema 寫入 `.tab` 檔案
+    // write into .tab file
     String data = String.join("\t", tableSchema);
     TableIO tableIO = new TableIO(dbName);
     tableIO.writeFile(tableName, data, false);
@@ -148,7 +134,6 @@ public class Database {
 
   private String getNewId(List<List<String>> table){
     return String.valueOf(table.size());
-
   }
 
 
@@ -157,7 +142,7 @@ public class Database {
     _printTable(tableName);
     List<List<String>> table = this.tables.get(tableName);
     if(tables == null || !tables.containsKey(tableName)){
-      System.out.println("[ERROR] Table not found: " + tableName);
+      System.err.println("[ERROR] Table not found: " + tableName);
       return "[ERROR] Table not found: " + tableName;
     }
     List<String> newData = new ArrayList<String>();
@@ -176,7 +161,7 @@ public class Database {
 
   public void exportDataToTabFile(String tableName){
     if(tables == null || !tables.containsKey(tableName)){
-      System.out.println("[ERROR] Table not found: " + tableName);
+      System.err.println("[ERROR] Table not found: " + tableName);
       return ;
     }
     try {
@@ -217,33 +202,33 @@ public class Database {
     List<List<String>> table = tables.get(tableName);
     List<String> header = table.get(0);
 
-    // **🚀 1. 轉換 `header` 欄位名稱為大寫**
+    // format header to uppercase 
     List<String> headerUpper = header.stream()
             .map(String::toUpperCase)
             .collect(Collectors.toList());
 
-    // **🚀 2. 轉換 `updates` 的 key 為大寫比對**
+    // format value to uppercase
     Map<String, String> updatesUpper = new HashMap<>();
     for (Map.Entry<String, String> entry : updates.entrySet()) {
         updatesUpper.put(entry.getKey().toUpperCase(), entry.getValue());
     }
 
-    // **🚀 3. 取得 `SET` 欄位的 index**
+    // get set col index
     List<Integer> updateIndices = new ArrayList<>();
     for (String column : updatesUpper.keySet()) {
         int colIdx = headerUpper.indexOf(column);
         if (colIdx == -1) {
-            System.out.println("[ERROR] Column " + column + " not found in table " + tableName);
+            System.err.println("[ERROR] Column " + column + " not found in table " + tableName);
             return "[ERROR] Column " + column + " not found in table " + tableName;
         }
         updateIndices.add(colIdx);
     }
 
-    // **🚀 4. 遍歷資料，更新符合條件的行**
+    // compare value
     for (int i = 1; i < table.size(); i++) {
         Map<String, String> row = new HashMap<>();
         for (int j = 0; j < header.size(); j++) {
-            row.put(headerUpper.get(j), table.get(i).get(j)); // 轉成大寫比對
+            row.put(headerUpper.get(j), table.get(i).get(j)); 
         }
 
         if (conditionTree == null || conditionTree.evaluate(row)) {
@@ -255,7 +240,7 @@ public class Database {
         }
     }
 
-    // **🚀 5. 存回 `.tab` 檔案**
+    // update .tab file
     exportDataToTabFile(tableName);
     System.out.println("[OK] Table " + tableName + " updated successfully.");
     return "[OK]";
@@ -268,9 +253,8 @@ public class Database {
 
     List<List<String>> result = new ArrayList<>();
 
-    // **🚀 1. 先加入篩選後的標題**
     List<String> selectedHeader = selectedIdx.stream()
-            .map(header::get)  // 選擇原始標題
+            .map(header::get)  // select original header name
             .collect(Collectors.toList());
     result.add(selectedHeader);
 
@@ -339,7 +323,6 @@ public class Database {
     List<String> header1 = table1.get(0);
     List<String> header2 = table2.get(0);
 
-    // 找到 JOIN 欄位的索引
     int joinIdx1 = header1.indexOf(table1JoinCol);
     int joinIdx2 = header2.indexOf(table2JoinCol);
 
@@ -348,7 +331,7 @@ public class Database {
         return Collections.emptyList();
     }
 
-    // **🚀 過濾掉 _DELETED 為 TRUE 的行**
+    // filter _DELETED==true 
     List<List<String>> filteredTable1 = table1.stream()
             .filter(row -> row == header1 || !row.get(header1.indexOf("_DELETED")).equalsIgnoreCase("TRUE"))
             .collect(Collectors.toList());
@@ -357,7 +340,8 @@ public class Database {
             .filter(row -> row == header2 || !row.get(header2.indexOf("_DELETED")).equalsIgnoreCase("TRUE"))
             .collect(Collectors.toList());
 
-    // **🚀 準備 JOIN 的標題，去掉 _DELETED**
+            
+    // remove _DELETED header 
     List<String> joinedHeader = new ArrayList<>();
     joinedHeader.addAll(header1);
     joinedHeader.addAll(header2);
@@ -365,19 +349,19 @@ public class Database {
     joinedHeader.remove("_DELETED");
 
     List<List<String>> joinedTable = new ArrayList<>();
-    joinedTable.add(joinedHeader); // 加入過濾後的標題
+    joinedTable.add(joinedHeader);
 
-    // **🚀 執行 JOIN**
-    for(int i = 1; i < filteredTable1.size(); i++){ // 跳過標題行
+    // execute join
+    for(int i = 1; i < filteredTable1.size(); i++){ // skip header
         List<String> row1 = filteredTable1.get(i);
         for(int j = 1; j < filteredTable2.size(); j++){
             List<String> row2 = filteredTable2.get(j);
-            if(row1.get(joinIdx1).equals(row2.get(joinIdx2))){ // 找到匹配行
+            if(row1.get(joinIdx1).equals(row2.get(joinIdx2))){ // match join col
                 List<String> joinedRow = new ArrayList<>();
                 joinedRow.addAll(row1);
                 joinedRow.addAll(row2);
                 
-                // **🚀 去除 _DELETED 欄位**
+                // remove _deleted in data row
                 joinedRow.remove(header1.indexOf("_DELETED"));
                 joinedRow.remove(header2.indexOf("_DELETED"));
 
@@ -521,9 +505,6 @@ public class Database {
    * DROP TABLE marks;
    */
   public String dropTable(String tableName){
-    // Remove from cache first
-    // tableCache.invalidate(tableName);
-    
     // Remove from tables object
     if(tables.containsKey(tableName)) {
       tables.remove(tableName);

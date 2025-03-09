@@ -14,27 +14,26 @@ public class InsertCommand extends DBCommand {
   @Override
   public String execute(){
     try {
-      // **🚀 1. 清理語法**
-      cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", "");  // 清理多餘空格 & `;`
+      cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", "");  // remove space & end ;
       if (!cmd.matches("(?i)^INSERT INTO\\s+\\w+\\s+VALUES\\s*\\(.*\\)$")) {
           System.err.println("[ERROR] Invalid INSERT syntax.");
           return "[ERROR] Invalid INSERT syntax.";
       }
 
-      // **🚀 2. 解析 table name**
       String[] parts = cmd.split("(?i)VALUES", 2);
       String tableName = parts[0].replaceFirst("(?i)^INSERT INTO\\s+", "").trim();
 
-      // **🚀 3. 解析 values (去除括號)**
+
+      //  remove end ()
       String valuesPart = parts[1].trim();
-      valuesPart = valuesPart.replaceAll("^\\(|\\)$", "");  // 移除頭尾括號
+      valuesPart = valuesPart.replaceAll("^\\(|\\)$", ""); 
       
       List<String> values = Arrays.stream(valuesPart.split("\\s*,\\s*"))
-                                  .map(value -> value.replaceAll("^'(.*)'$", "$1").trim()) // 去除單引號
-                                  .map(value -> value.equalsIgnoreCase("null") ? "" : value) // NULL 轉成空字串
+                                  .map(value -> value.replaceAll("^'(.*)'$", "$1").trim()) // remove ''
+                                  .map(value -> value.equalsIgnoreCase("null") ? "" : value) // NULL to ""
                                   .collect(Collectors.toList());
 
-      // **🚀 4. 執行插入**
+      // execute insert
       return db.insertData(tableName, values);
 
     } catch (Exception e) {
