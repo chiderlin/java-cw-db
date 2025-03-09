@@ -1,6 +1,4 @@
 package edu.uob;
-import java.util.Map;
-import java.util.HashMap;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,21 +7,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class TableIO {
   private String dbName;
-  private String tableName;
   
-  public TableIO(String dbName, String tableName){
+  public TableIO(String dbName){
     this.dbName = dbName;
-    this.tableName = tableName;
   }
 
-  public List<List<String>> loadFile(){
-    String fileName = String.format("databases/%s/%s.tab", this.dbName, this.tableName);
+  public List<List<String>> loadFile(String tableName){
+    String fileName = String.format("databases/%s/%s.tab", this.dbName, tableName);
     File fileToOpen = new File(fileName);
     if(!fileToOpen.exists()){
       System.out.println("[ERROR] File not found: "+ fileName);
@@ -59,8 +54,8 @@ public class TableIO {
 
 
 
-  public void writeFile(String data, boolean append){
-  String fileName = String.format("databases/%s/%s.tab", this.dbName, this.tableName);
+  public void writeFile(String tableName, String data, boolean append){
+  String fileName = String.format("databases/%s/%s.tab", this.dbName, tableName);
   File fileToOpen = new File(fileName);
   try {
     if(!fileToOpen.exists()){
@@ -80,5 +75,19 @@ public class TableIO {
 }
 
 
+  public boolean deleteDir(File dir){
+    if(!dir.exists()) return false;
+    File[] files = dir.listFiles();
+    if(files != null) {
+        for(File file: files){
+            if(file.isDirectory()){
+                deleteDir(file); // recursly 
+            } else {
+                file.delete(); // delete file
+            }
+        }
+    }
+    return dir.delete(); // delete empty folder;
+  }
 
 }

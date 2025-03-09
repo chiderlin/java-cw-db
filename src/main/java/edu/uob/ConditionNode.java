@@ -21,7 +21,7 @@ public class ConditionNode {
   }
 
   // resursively evaluate 
-  boolean evaluate(Map<String, String> row){
+  public boolean evaluate(Map<String, String> row){
     if(condition != null){
       return evaluateCondition(row, condition);
     }
@@ -76,6 +76,7 @@ public class ConditionNode {
     };
   }
 
+  
   private boolean isNumeric(String str){
     return str.matches("-?\\d+(\\.\\d+)?");
   }

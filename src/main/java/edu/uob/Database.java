@@ -1,37 +1,20 @@
 package edu.uob;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.NumberFormat.Style;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
-// 讀取tab檔
-// 載入tab檔
-// 這樣db要一次載入全部tab files? -> 先依照語法有用到的再load進來好了。看效能如何再做調整
-// 已經load進來的就繼續暫存在memory裡，所以資料會越load越多 -> cache機制去控制，過期的自動刪除，避免資料太多
-// 
 public class Database {
   private static final char END_OF_TRANSMISSION = 4;
   private String dbName;
-  private List<String> tableColumn = new ArrayList<>();
   private HashMap<String, List<List<String>>> tables = new HashMap<>(); // type 2
-  private Cache tableCache;
   /**
    * tables = {
    *  users:[[1,'bob',21,'bob@bob.net'],[2,'bob',21,'bob@bob.net'],[1,'bob',21,'bob@bob.net']]
@@ -42,7 +25,10 @@ public class Database {
 
   public Database(String dbName){
     this.dbName = dbName;
-    this.tableCache = new Cache();
+  }
+
+  public String getDbName(){
+    return this.dbName;
   }
 
   public static void main(String args[]) {
@@ -63,9 +49,9 @@ public class Database {
     cols.add("name");
     cols.add("mark");
     cols.add("pass");
-    String pathStr = Paths.get("databases"+File.separator+"test").toAbsolutePath().toString();
-    Path path = Paths.get(pathStr);
-    db.createTable("test", path, cols);
+    // String pathStr = Paths.get("databases"+File.separator+"test").toAbsolutePath().toString();
+    // Path path = Paths.get(pathStr);
+    // db.createTable("test", path, cols);
     // --- test create table ------
 
     // --- test getData (select syntax) ------
@@ -92,8 +78,8 @@ public class Database {
       // }
 
       // If not in cache, load from file
-      TableIO tableIO = new TableIO(this.dbName, tableName);
-      List<List<String>> tableData = tableIO.loadFile();
+      TableIO tableIO = new TableIO(this.dbName);
+      List<List<String>> tableData = tableIO.loadFile(tableName);
       tables.put(tableName, tableData);
       
       // Add to cache
@@ -121,29 +107,42 @@ public class Database {
   /*
     CREATE TABLE marks (name, mark, pass);
   */ 
-  public String createTable(String tableName, Path path, List<String> values){
+  public String createTable(String tableName, List<String> values){
     
-    System.out.println("path.toString() "+path.toString());
-    
-    String lastPart = path.getFileName().toString();
-    System.out.println("lastPart "+lastPart);
-    String parentPath = path.getParent().getFileName().toString();
-    if(lastPart.equals("databases") || !parentPath.equals("databases")){
-        System.err.println("An error occurred: Switch to your databases first.");
-        return "[ERROR]";
+    if (dbName == null || dbName.isEmpty() || tableName == null || tableName.isEmpty()) {
+      return "[ERROR] Database name or table name is missing.";
+    }
+    // 確保資料庫目錄存在
+    File dbDir = new File("databases" + File.separator + dbName);
+    if (!dbDir.exists()) {
+        return "[ERROR] Database not found: " + dbName;
     }
 
+    // 檢查 tableName 是否合法（不能包含特殊字元）
+    if (!tableName.matches("[a-zA-Z0-9_]+")) {
+        return "[ERROR] Invalid table name. Only letters, numbers, and underscores are allowed.";
+    }
 
+    // 檢查 table 是否已存在
+    File tableFile = new File(dbDir, tableName + ".tab");
+    if (tableFile.exists()) {
+        return "[ERROR] Table " + tableName + " already exists.";
+    }
+
+    // 準備表格結構
     List<String> tableSchema = new ArrayList<>();
-    tableSchema.add("id");
+    tableSchema.add("id"); // 自動遞增 ID
     tableSchema.addAll(values);
-    tableSchema.add("_DELETED");
+    tableSchema.add("_DELETED"); // 軟刪除標記
 
+    // 把 schema 寫入 `.tab` 檔案
     String data = String.join("\t", tableSchema);
-    TableIO tableIO = new TableIO(this.dbName, tableName);
-    tableIO.writeFile(data, false);
+    TableIO tableIO = new TableIO(dbName);
+    tableIO.writeFile(tableName, data, false);
+
     System.out.println("[OK] Table " + tableName + " created with schema: " + tableSchema);
     return "[OK]";
+    
   }
 
 
@@ -153,13 +152,13 @@ public class Database {
   }
 
 
-  public void insertData(String tableName, List<String>values){
+  public String insertData(String tableName, List<String>values){
     loadTableData(tableName);
     _printTable(tableName);
     List<List<String>> table = this.tables.get(tableName);
     if(tables == null || !tables.containsKey(tableName)){
       System.out.println("[ERROR] Table not found: " + tableName);
-      return ;
+      return "[ERROR] Table not found: " + tableName;
     }
     List<String> newData = new ArrayList<String>();
     String id = this.getNewId(table);
@@ -171,9 +170,7 @@ public class Database {
     table.add(newData);
     this.exportDataToTabFile(tableName);
     
-    // Update cache
-    // tableCache.invalidate(tableName);
-    // tableCache.add(tableName, table);
+    return "[OK]";
   }
 
 
@@ -191,8 +188,8 @@ public class Database {
         fileContent.append(rowDataStr).append("\n");
       }
   
-      TableIO tableIO = new TableIO(this.dbName, tableName);
-      tableIO.writeFile(fileContent.toString(), false);
+      TableIO tableIO = new TableIO(this.dbName);
+      tableIO.writeFile(tableName, fileContent.toString(), false);
     } catch(Exception e){
       System.err.println("[ERROR] exportDataToTabFile: " + e.getMessage());
     }
@@ -208,13 +205,13 @@ public class Database {
    *   UPDATE test SET age = 35, City= 'Frankfurt' WHERE age < 18;
    *    [OK]
    */
-  public void updateData(String tableName, Map<String, String> updates, ConditionNode conditionTree){
+  public String updateData(String tableName, Map<String, String> updates, ConditionNode conditionTree){
     loadTableData(tableName);
     _printTable(tableName);
 
     if (!tables.containsKey(tableName)) {
         System.out.println("[ERROR] Table " + tableName + " does not exist.");
-        return;
+        return "[ERROR] Table " + tableName + " does not exist.";
     }
 
     List<List<String>> table = tables.get(tableName);
@@ -237,7 +234,7 @@ public class Database {
         int colIdx = headerUpper.indexOf(column);
         if (colIdx == -1) {
             System.out.println("[ERROR] Column " + column + " not found in table " + tableName);
-            return;
+            return "[ERROR] Column " + column + " not found in table " + tableName;
         }
         updateIndices.add(colIdx);
     }
@@ -261,6 +258,7 @@ public class Database {
     // **🚀 5. 存回 `.tab` 檔案**
     exportDataToTabFile(tableName);
     System.out.println("[OK] Table " + tableName + " updated successfully.");
+    return "[OK]";
 }
 
 
@@ -398,21 +396,21 @@ public class Database {
    * ALTER TABLE marks ADD age;
    * ALTER TABLE marks DROP pass;
   */
-  public void alterData(String tableName, String action, String columnName){
+  public String alterData(String tableName, String action, String columnName){
     loadTableData(tableName);
     _printTable(tableName);
 
     if(!tables.containsKey(tableName)){
-      System.out.println("Table " + tableName + "does not exist.");
-      return ;
+      System.err.println("[ERROR] Table " + tableName + "does not exist.");
+      return "[ERROR] Table " + tableName + "does not exist.";
     }
     List<List<String>> table = tables.get(tableName);
 
     List<String> header = new ArrayList<>(table.get(0));
     if("ADD".equalsIgnoreCase(action)){
       if(header.contains(columnName)){
-        System.out.println("Column " + columnName + " already exists in table " + tableName);
-        return ;
+        System.err.println("[ERROR] Column " + columnName + " already exists in table " + tableName);
+        return "[ERROR] Column " + columnName + " already exists in table " + tableName;
       }
       // Add column to header 
       header.add(columnName);
@@ -438,13 +436,13 @@ public class Database {
     } else if ("DROP".equalsIgnoreCase(action)){
       int colIdx = header.indexOf(columnName);
       if(colIdx == -1){
-        System.out.println("Column " + columnName + " does not exist in table " + tableName);
-        return ;
+        System.out.println("[ERROR] Column " + columnName + " does not exist in table " + tableName);
+        return "[ERROR] Column " + columnName + " does not exist in table " + tableName;
       }
 
       if (columnName.equalsIgnoreCase("ID") || columnName.equalsIgnoreCase("_DELETED")) {
         System.out.println("[ERROR] Cannot drop primary key 'ID' or system column '_DELETED'.");
-        return;
+        return "[ERROR] Cannot drop primary key 'ID' or system column '_DELETED'.";
       }
 
       //Remove col from header
@@ -457,27 +455,28 @@ public class Database {
       }
 
     } else {
-      System.out.println("Invalid action: " + action + ". Use ADD or DROP.");
-      return ;
+      System.out.println("[ERROR] Invalid action: " + action + ". Use ADD or DROP.");
+      return "[ERROR] Invalid action: " + action + ". Use ADD or DROP.";
     }
 
     // save updated table
     table.set(0, header);
     tables.put(tableName, table);
     exportDataToTabFile(tableName);
+    return "[OK]";
   }
 
   /*
 
    * DELETE FROM marks WHERE name == 'Sion';
   */
-  public void deleteData(String tableName, ConditionNode conditionTree){
+  public String deleteData(String tableName, ConditionNode conditionTree){
     // ensure table exists;
     loadTableData(tableName);
     _printTable(tableName);
     if(!tables.containsKey(tableName)){
-      System.out.println("Table " + tableName + "does not exists.");
-      return ;
+      System.err.println("[ERROR] Table " + tableName + "does not exists.");
+      return "[ERROR] Table " + tableName + "does not exists.";
     }
 
     List<List<String>> table = tables.get(tableName);
@@ -485,15 +484,15 @@ public class Database {
 
     int deleteIdx = header.indexOf("_DELETED");
     if (deleteIdx == -1) {
-      System.out.println("[ERROR] Table " + tableName + " does not support deletion tracking.");
-      return;
+      System.err.println("[ERROR] Table " + tableName + " does not support deletion tracking.");
+      return "[ERROR] Table " + tableName + " does not support deletion tracking.";
     }
 
     boolean updated = false;
     for (int i = 1; i < table.size(); i++) {
         Map<String, String> row = convertRowToMap(table.get(i), header);
         if (conditionTree.evaluate(row)) {
-            table.get(i).set(deleteIdx, "TRUE"); // ✅ 標記刪除
+            table.get(i).set(deleteIdx, "TRUE"); // delete
             updated = true;
         }
     }
@@ -502,10 +501,13 @@ public class Database {
       exportDataToTabFile(tableName);
       System.out.println("[OK] Deleted matching rows from table " + tableName);
     } else {
-        System.out.println("[INFO] No matching records found to delete.");
+      System.out.println("[INFO] No matching records found to delete.");
     }
+    
+    return "[OK]";
 
   }
+
 
   public static Map<String, String> convertRowToMap(List<String> row, List<String> header){
     Map<String, String> rowMap = new HashMap<>();
@@ -518,7 +520,7 @@ public class Database {
   /* 
    * DROP TABLE marks;
    */
-  public void dropTable(String tableName){
+  public String dropTable(String tableName){
     // Remove from cache first
     // tableCache.invalidate(tableName);
     
@@ -531,13 +533,15 @@ public class Database {
     String fileName = String.format("databases/%s/%s.tab", dbName, tableName);
     File file = new File(fileName);
     if(!file.exists()) {
-      System.out.println("File not found: " + fileName);
-      return;
+      System.out.println("[ERROR] File not found: " + fileName);
+      return "[ERROR] File not found: " + fileName;
     }
     if(file.delete()) {
       System.out.println("Table '" + tableName + "' removed successfully.");
     } else {
       System.out.println("Failed to delete file: " + tableName);
     }
+
+    return "[OK]";
   }
 }
