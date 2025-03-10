@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="edu.uob.ExampleDBTests" time="0.179" tests="12" errors="0" skipped="0" failures="1">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="edu.uob.ExampleDBTests" time="0.116" tests="12" errors="0" skipped="0" failures="1">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
-    <property name="java.class.path" value="/home/rk24876/code/java-cw-db/target/test-classes:/home/rk24876/code/java-cw-db/target/classes:/home/rk24876/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/home/rk24876/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/home/rk24876/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/home/rk24876/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/rk24876/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/home/rk24876/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-suite/1.8.2/junit-platform-suite-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-suite-api/1.8.2/junit-platform-suite-api-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.8.2/junit-platform-suite-engine-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.8.2/junit-platform-suite-commons-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar:"/>
-    <property name="java.vm.vendor" value="Red Hat, Inc."/>
+    <property name="java.class.path" value="/Users/chider/code/bristol/cw-db/target/test-classes:/Users/chider/code/bristol/cw-db/target/classes:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/chider/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/chider/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite/1.8.2/junit-platform-suite-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-api/1.8.2/junit-platform-suite-api-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.8.2/junit-platform-suite-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.8.2/junit-platform-suite-commons-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar:"/>
+    <property name="java.vm.vendor" value="Eclipse Adoptium"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="java.vendor.url" value="https://www.redhat.com/"/>
-    <property name="os.name" value="Linux"/>
+    <property name="java.vendor.url" value="https://adoptium.net/"/>
+    <property name="os.name" value="Mac OS X"/>
     <property name="java.vm.specification.version" value="17"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
-    <property name="user.country" value="GB"/>
-    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk-17.0.14.0.7-3.el8.x86_64/lib"/>
-    <property name="sun.java.command" value="/home/rk24876/code/java-cw-db/target/surefire/surefirebooter10413207243113367761.jar /home/rk24876/code/java-cw-db/target/surefire 2025-03-10T16-42-10_807-jvmRun1 surefire17875408822848644620tmp surefire_015447416870096717002tmp"/>
+    <property name="user.country" value="TW"/>
+    <property name="sun.boot.library.path" value="/Users/chider/Library/Java/JavaVirtualMachines/temurin-17.0.13/Contents/Home/lib"/>
+    <property name="sun.java.command" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter11324449264893401701.jar /Users/chider/code/bristol/cw-db/target/surefire 2025-03-10T16-58-39_882-jvmRun1 surefire5246339619477053707tmp surefire_08331602641306778770tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="test" value="edu.uob.ExampleDBTests"/>
-    <property name="surefire.test.class.path" value="/home/rk24876/code/java-cw-db/target/test-classes:/home/rk24876/code/java-cw-db/target/classes:/home/rk24876/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/home/rk24876/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/home/rk24876/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/home/rk24876/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/rk24876/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/home/rk24876/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-suite/1.8.2/junit-platform-suite-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-suite-api/1.8.2/junit-platform-suite-api-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.8.2/junit-platform-suite-engine-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.8.2/junit-platform-suite-commons-1.8.2.jar:/home/rk24876/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar:"/>
+    <property name="surefire.test.class.path" value="/Users/chider/code/bristol/cw-db/target/test-classes:/Users/chider/code/bristol/cw-db/target/classes:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/chider/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/chider/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite/1.8.2/junit-platform-suite-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-api/1.8.2/junit-platform-suite-api-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.8.2/junit-platform-suite-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.8.2/junit-platform-suite-commons-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
-    <property name="user.home" value="/home/rk24876"/>
+    <property name="user.home" value="/Users/chider"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
-    <property name="java.version.date" value="2025-01-21"/>
-    <property name="java.home" value="/usr/lib/jvm/java-17-openjdk-17.0.14.0.7-3.el8.x86_64"/>
+    <property name="java.version.date" value="2024-10-15"/>
+    <property name="java.home" value="/Users/chider/Library/Java/JavaVirtualMachines/temurin-17.0.13/Contents/Home"/>
     <property name="file.separator" value="/"/>
-    <property name="basedir" value="/home/rk24876/code/java-cw-db"/>
+    <property name="basedir" value="/Users/chider/code/bristol/cw-db"/>
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="line.separator" value="&#10;"/>
-    <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/rk24876/code/java-cw-db/target/surefire/surefirebooter10413207243113367761.jar"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter11324449264893401701.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
-    <property name="java.runtime.version" value="17.0.14+7-LTS"/>
-    <property name="user.name" value="rk24876"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="java.runtime.version" value="17.0.13+11"/>
+    <property name="user.name" value="chider"/>
     <property name="path.separator" value=":"/>
-    <property name="os.version" value="4.18.0-553.42.1.el8_10.x86_64"/>
+    <property name="os.version" value="13.6.1"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="file.encoding" value="UTF-8"/>
     <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
-    <property name="java.vendor.version" value="(Red_Hat-17.0.14.0.7-1)"/>
-    <property name="localRepository" value="/home/rk24876/.m2/repository"/>
-    <property name="java.vendor.url.bug" value="https://access.redhat.com/support/cases/"/>
-    <property name="java.io.tmpdir" value="/tmp"/>
-    <property name="java.version" value="17.0.14"/>
-    <property name="user.dir" value="/home/rk24876/code/java-cw-db"/>
-    <property name="os.arch" value="amd64"/>
+    <property name="java.vendor.version" value="Temurin-17.0.13+11"/>
+    <property name="localRepository" value="/Users/chider/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/>
+    <property name="java.io.tmpdir" value="/var/folders/5t/7jwtj6dx0vgb0_l47fc3dxyh0000gn/T/"/>
+    <property name="java.version" value="17.0.13"/>
+    <property name="user.dir" value="/Users/chider/code/bristol/cw-db"/>
+    <property name="os.arch" value="aarch64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="native.encoding" value="UTF-8"/>
-    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.library.path" value="/Users/chider/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
     <property name="java.vm.info" value="mixed mode, sharing"/>
-    <property name="java.vendor" value="Red Hat, Inc."/>
-    <property name="java.vm.version" value="17.0.14+7-LTS"/>
+    <property name="java.vendor" value="Eclipse Adoptium"/>
+    <property name="java.vm.version" value="17.0.13+11"/>
     <property name="java.specification.maintenance.version" value="1"/>
-    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testAlterTable" classname="edu.uob.ExampleDBTests" time="0.039">
-    <system-out><![CDATA[before dbName: msyhnosjfp
-after normalizeDbName: msyhnosjfp
-File created: msyhnosjfp
-[INFO] Switch database: msyhnosjfp successfully.
+  <testcase name="testAlterTable" classname="edu.uob.ExampleDBTests" time="0.033">
+    <system-out><![CDATA[before dbName: dvnehlyany
+after normalizeDbName: dvnehlyany
+File created: dvnehlyany
+[INFO] Switch database: dvnehlyany successfully.
 Parsed columns: [name, age]
 [INFO] Write file successfully.
 [OK] Table students created with schema: [id, name, age, _DELETED]
@@ -91,11 +94,11 @@ selectedCols: [id, name, grade]
 id	name	grade
 ]]></system-out>
   </testcase>
-  <testcase name="testUpdateData" classname="edu.uob.ExampleDBTests" time="0.016">
-    <system-out><![CDATA[before dbName: nufungrjmo
-after normalizeDbName: nufungrjmo
-File created: nufungrjmo
-[INFO] Switch database: nufungrjmo successfully.
+  <testcase name="testUpdateData" classname="edu.uob.ExampleDBTests" time="0.014">
+    <system-out><![CDATA[before dbName: dompxugjrf
+after normalizeDbName: dompxugjrf
+File created: dompxugjrf
+[INFO] Switch database: dompxugjrf successfully.
 Parsed columns: [name, price]
 [INFO] Write file successfully.
 [OK] Table products created with schema: [id, name, price, _DELETED]
@@ -129,11 +132,11 @@ id	name	price
 1	Laptop	1200
 ]]></system-out>
   </testcase>
-  <testcase name="testAdvanceWhereQuery" classname="edu.uob.ExampleDBTests" time="0.019">
-    <system-out><![CDATA[before dbName: worikyrwoo
-after normalizeDbName: worikyrwoo
-File created: worikyrwoo
-[INFO] Switch database: worikyrwoo successfully.
+  <testcase name="testAdvanceWhereQuery" classname="edu.uob.ExampleDBTests" time="0.009">
+    <system-out><![CDATA[before dbName: hwlkdfqeev
+after normalizeDbName: hwlkdfqeev
+File created: hwlkdfqeev
+[INFO] Switch database: hwlkdfqeev successfully.
 Parsed columns: [name, salary]
 [INFO] Write file successfully.
 [OK] Table employees created with schema: [id, name, salary, _DELETED]
@@ -197,11 +200,11 @@ id	name	salary
 2	Bob	4500
 ]]></system-out>
   </testcase>
-  <testcase name="testCaseInsensitiveSQL" classname="edu.uob.ExampleDBTests" time="0.009">
-    <system-out><![CDATA[before dbName: qrkabovhaq
-after normalizeDbName: qrkabovhaq
-File created: qrkabovhaq
-[INFO] Switch database: qrkabovhaq successfully.
+  <testcase name="testCaseInsensitiveSQL" classname="edu.uob.ExampleDBTests" time="0.005">
+    <system-out><![CDATA[before dbName: nbndmjpqvd
+after normalizeDbName: nbndmjpqvd
+File created: nbndmjpqvd
+[INFO] Switch database: nbndmjpqvd successfully.
 Parsed columns: [name, age]
 [INFO] Write file successfully.
 [OK] Table students created with schema: [id, name, age, _DELETED]
@@ -226,11 +229,11 @@ id	name	age
 1	Alice	20
 ]]></system-out>
   </testcase>
-  <testcase name="testQueryID" classname="edu.uob.ExampleDBTests" time="0.008">
-    <system-out><![CDATA[before dbName: uqtwlkfbai
-after normalizeDbName: uqtwlkfbai
-File created: uqtwlkfbai
-[INFO] Switch database: uqtwlkfbai successfully.
+  <testcase name="testQueryID" classname="edu.uob.ExampleDBTests" time="0.005">
+    <system-out><![CDATA[before dbName: exucueorbr
+after normalizeDbName: exucueorbr
+File created: exucueorbr
+[INFO] Switch database: exucueorbr successfully.
 Parsed columns: [name, mark, pass]
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
@@ -255,12 +258,12 @@ id
 1
 ]]></system-out>
   </testcase>
-  <testcase name="testBasicCreateAndQuery" classname="edu.uob.ExampleDBTests" time="0.015">
-    <system-out><![CDATA[randomName: aierliidgm
-before dbName: aierliidgm
-after normalizeDbName: aierliidgm
-File created: aierliidgm
-[INFO] Switch database: aierliidgm successfully.
+  <testcase name="testBasicCreateAndQuery" classname="edu.uob.ExampleDBTests" time="0.005">
+    <system-out><![CDATA[randomName: fompwqbeqj
+before dbName: fompwqbeqj
+after normalizeDbName: fompwqbeqj
+File created: fompwqbeqj
+[INFO] Switch database: fompwqbeqj successfully.
 Parsed columns: [name, mark, pass]
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
@@ -296,11 +299,11 @@ id	name	mark	pass
 4	Chris	20	FALSE
 ]]></system-out>
   </testcase>
-  <testcase name="testJoinTables" classname="edu.uob.ExampleDBTests" time="0.013">
-    <system-out><![CDATA[before dbName: kiclkaicvr
-after normalizeDbName: kiclkaicvr
-File created: kiclkaicvr
-[INFO] Switch database: kiclkaicvr successfully.
+  <testcase name="testJoinTables" classname="edu.uob.ExampleDBTests" time="0.005">
+    <system-out><![CDATA[before dbName: giyhorxhid
+after normalizeDbName: giyhorxhid
+File created: giyhorxhid
+[INFO] Switch database: giyhorxhid successfully.
 Parsed columns: [order_id, customer_id]
 [INFO] Write file successfully.
 [OK] Table orders created with schema: [id, order_id, customer_id, _DELETED]
@@ -327,7 +330,7 @@ id	order_id	customer_id	id	customer_id	name
 1	1	101	101	John Doe	FALSE
 ]]></system-out>
   </testcase>
-  <testcase name="testDeleteData" classname="edu.uob.ExampleDBTests" time="0.019">
+  <testcase name="testDeleteData" classname="edu.uob.ExampleDBTests" time="0.01">
     <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Alice was deleted but still appears in SELECT results. ==> expected: <false> but was: <true>
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
 	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:40)
@@ -404,10 +407,10 @@ id	order_id	customer_id	id	customer_id	name
 	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:562)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:548)
 ]]></failure>
-    <system-out><![CDATA[before dbName: whofiqanqj
-after normalizeDbName: whofiqanqj
-File created: whofiqanqj
-[INFO] Switch database: whofiqanqj successfully.
+    <system-out><![CDATA[before dbName: ivdjwblica
+after normalizeDbName: ivdjwblica
+File created: ivdjwblica
+[INFO] Switch database: ivdjwblica successfully.
 Parsed columns: [name, salary]
 [INFO] Write file successfully.
 [OK] Table employees created with schema: [id, name, salary, _DELETED]
@@ -503,12 +506,12 @@ id	name	salary
 1	Alice	4000
 3	Alex	6000
 4	Peter	6600
-Single condition detected: salary <= 5000
+Single condition detected: salary < 5000
 [INFO] Loaded table: employees
 table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, TRUE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
 table.size() 5
 print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, TRUE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-[INFO] parts: salary <=
+[INFO] parts: salary <
 [INFO] column: SALARY
 [INFO] value: 5000
 [INFO] rowValue: 4000
@@ -527,11 +530,11 @@ id	name	salary
 4	Peter	6600
 ]]></system-out>
   </testcase>
-  <testcase name="testNullValues" classname="edu.uob.ExampleDBTests" time="0.01">
-    <system-out><![CDATA[before dbName: cxxksqtdlw
-after normalizeDbName: cxxksqtdlw
-File created: cxxksqtdlw
-[INFO] Switch database: cxxksqtdlw successfully.
+  <testcase name="testNullValues" classname="edu.uob.ExampleDBTests" time="0.005">
+    <system-out><![CDATA[before dbName: iwvjkqhpbv
+after normalizeDbName: iwvjkqhpbv
+File created: iwvjkqhpbv
+[INFO] Switch database: iwvjkqhpbv successfully.
 Parsed columns: [name, salary]
 [INFO] Write file successfully.
 [OK] Table employees created with schema: [id, name, salary, _DELETED]
@@ -555,11 +558,11 @@ id	name	salary
 2		5000
 ]]></system-out>
   </testcase>
-  <testcase name="testTablePersistsAfterRestart" classname="edu.uob.ExampleDBTests" time="0.008">
-    <system-out><![CDATA[before dbName: eoshskpygc
-after normalizeDbName: eoshskpygc
-File created: eoshskpygc
-[INFO] Switch database: eoshskpygc successfully.
+  <testcase name="testTablePersistsAfterRestart" classname="edu.uob.ExampleDBTests" time="0.004">
+    <system-out><![CDATA[before dbName: xwqayfbhdw
+after normalizeDbName: xwqayfbhdw
+File created: xwqayfbhdw
+[INFO] Switch database: xwqayfbhdw successfully.
 Parsed columns: [name, mark, pass]
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
@@ -568,7 +571,7 @@ table :[[id, name, mark, pass, _DELETED]]
 table.size() 1
 print table <marks>: [[id, name, mark, pass, _DELETED]]
 [INFO] Write file successfully.
-[INFO] Switch database: eoshskpygc successfully.
+[INFO] Switch database: xwqayfbhdw successfully.
 [INFO] Loaded table: marks
 table :[[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE]]
 table.size() 2
@@ -578,20 +581,20 @@ id	name	mark	pass
 1	Simon	65	TRUE
 ]]></system-out>
   </testcase>
-  <testcase name="testInvalidSQL" classname="edu.uob.ExampleDBTests" time="0.002">
-    <system-out><![CDATA[before dbName: ykjwnqxumb
-after normalizeDbName: ykjwnqxumb
-File created: ykjwnqxumb
-[INFO] Switch database: ykjwnqxumb successfully.
+  <testcase name="testInvalidSQL" classname="edu.uob.ExampleDBTests" time="0.001">
+    <system-out><![CDATA[before dbName: rjnvoicbij
+after normalizeDbName: rjnvoicbij
+File created: rjnvoicbij
+[INFO] Switch database: rjnvoicbij successfully.
 ]]></system-out>
     <system-err><![CDATA[[ERROR] Invalid INSERT syntax.
 ]]></system-err>
   </testcase>
-  <testcase name="testForErrorTag" classname="edu.uob.ExampleDBTests" time="0.009">
-    <system-out><![CDATA[before dbName: yxjylhjrty
-after normalizeDbName: yxjylhjrty
-File created: yxjylhjrty
-[INFO] Switch database: yxjylhjrty successfully.
+  <testcase name="testForErrorTag" classname="edu.uob.ExampleDBTests" time="0.003">
+    <system-out><![CDATA[before dbName: vjyufuyofe
+after normalizeDbName: vjyufuyofe
+File created: vjyufuyofe
+[INFO] Switch database: vjyufuyofe successfully.
 Parsed columns: [name, mark, pass]
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
@@ -600,7 +603,7 @@ table :[[id, name, mark, pass, _DELETED]]
 table.size() 1
 print table <marks>: [[id, name, mark, pass, _DELETED]]
 [INFO] Write file successfully.
-[ERROR] File not found: databases/yxjylhjrty/libraryfines.tab
+[ERROR] File not found: databases/vjyufuyofe/libraryfines.tab
 table :[]
 [ERROR _printTable] Table Not Found.
 ]]></system-out>

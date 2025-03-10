@@ -19,21 +19,28 @@ public class ExampleDBTests {
         server = new DBServer();
     }
 
-    // Random name generator - useful for testing "bare earth" queries (i.e. where tables don't previously exist)
+    // Random name generator - useful for testing "bare earth" queries (i.e. where
+    // tables don't previously exist)
     private String generateRandomName() {
         String randomName = "";
-        for(int i=0; i<10 ;i++) randomName += (char)( 97 + (Math.random() * 25.0));
+        for (int i = 0; i < 10; i++)
+            randomName += (char) (97 + (Math.random() * 25.0));
         return randomName;
     }
 
     private String sendCommandToServer(String command) {
-        // Try to send a command to the server - this call will timeout if it takes too long (in case the server enters an infinite loop)
-        return assertTimeoutPreemptively(Duration.ofMillis(1000), () -> { return server.handleCommand(command);},
-        "Server took too long to respond (probably stuck in an infinite loop)");
+        // Try to send a command to the server - this call will timeout if it takes too
+        // long (in case the server enters an infinite loop)
+        return assertTimeoutPreemptively(Duration.ofMillis(1000), () -> {
+            return server.handleCommand(command);
+        },
+                "Server took too long to respond (probably stuck in an infinite loop)");
     }
 
-    // A basic test that creates a database, creates a table, inserts some test data, then queries it.
-    // It then checks the response to see that a couple of the entries in the table are returned as expected
+    // A basic test that creates a database, creates a table, inserts some test
+    // data, then queries it.
+    // It then checks the response to see that a couple of the entries in the table
+    // are returned as expected
     @Test
     public void testBasicCreateAndQuery() {
         String randomName = generateRandomName();
@@ -48,12 +55,16 @@ public class ExampleDBTests {
         String response = sendCommandToServer("SELECT * FROM marks;");
         assertTrue(response.contains("[OK]"), "A valid query was made, however an [OK] tag was not returned");
         assertFalse(response.contains("[ERROR]"), "A valid query was made, however an [ERROR] tag was returned");
-        assertTrue(response.contains("Simon"), "An attempt was made to add Simon to the table, but they were not returned by SELECT *");
-        assertTrue(response.contains("Chris"), "An attempt was made to add Chris to the table, but they were not returned by SELECT *");
+        assertTrue(response.contains("Simon"),
+                "An attempt was made to add Simon to the table, but they were not returned by SELECT *");
+        assertTrue(response.contains("Chris"),
+                "An attempt was made to add Chris to the table, but they were not returned by SELECT *");
     }
 
-    // A test to make sure that querying returns a valid ID (this test also implicitly checks the "==" condition)
-    // (these IDs are used to create relations between tables, so it is essential that suitable IDs are being generated and returned !)
+    // A test to make sure that querying returns a valid ID (this test also
+    // implicitly checks the "==" condition)
+    // (these IDs are used to create relations between tables, so it is essential
+    // that suitable IDs are being generated and returned !)
     @Test
     public void testQueryID() {
         String randomName = generateRandomName();
@@ -63,16 +74,18 @@ public class ExampleDBTests {
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         String response = sendCommandToServer("SELECT id FROM marks WHERE name == 'Simon';");
         // Convert multi-lined responses into just a single line
-        String singleLine = response.replace("\n"," ").trim();
+        String singleLine = response.replace("\n", " ").trim();
         // Split the line on the space character
         String[] tokens = singleLine.split(" ");
-        // Check that the very last token is a number (which should be the ID of the entry)
-        String lastToken = tokens[tokens.length-1];
+        // Check that the very last token is a number (which should be the ID of the
+        // entry)
+        String lastToken = tokens[tokens.length - 1];
 
         try {
             Integer.valueOf(lastToken);
         } catch (NumberFormatException nfe) {
-            fail("The last token returned by `SELECT id FROM marks WHERE name == 'Simon';` should have been an integer ID, but was " + lastToken);
+            fail("The last token returned by `SELECT id FROM marks WHERE name == 'Simon';` should have been an integer ID, but was "
+                    + lastToken);
         }
     }
 
@@ -88,10 +101,12 @@ public class ExampleDBTests {
         server = new DBServer();
         sendCommandToServer("USE " + randomName + ";");
         String response = sendCommandToServer("SELECT * FROM marks;");
-        assertTrue(response.contains("Simon"), "Simon was added to a table and the server restarted - but Simon was not returned by SELECT *");
+        assertTrue(response.contains("Simon"),
+                "Simon was added to a table and the server restarted - but Simon was not returned by SELECT *");
     }
 
-    // Test to make sure that the [ERROR] tag is returned in the case of an error (and NOT the [OK] tag)
+    // Test to make sure that the [ERROR] tag is returned in the case of an error
+    // (and NOT the [OK] tag)
     @Test
     public void testForErrorTag() {
         String randomName = generateRandomName();
@@ -100,8 +115,10 @@ public class ExampleDBTests {
         sendCommandToServer("CREATE TABLE marks (name, mark, pass);");
         sendCommandToServer("INSERT INTO marks VALUES ('Simon', 65, TRUE);");
         String response = sendCommandToServer("SELECT * FROM libraryfines;");
-        assertTrue(response.contains("[ERROR]"), "An attempt was made to access a non-existent table, however an [ERROR] tag was not returned");
-        assertFalse(response.contains("[OK]"), "An attempt was made to access a non-existent table, however an [OK] tag was returned");
+        assertTrue(response.contains("[ERROR]"),
+                "An attempt was made to access a non-existent table, however an [ERROR] tag was not returned");
+        assertFalse(response.contains("[OK]"),
+                "An attempt was made to access a non-existent table, however an [OK] tag was returned");
     }
 
     @Test
@@ -131,19 +148,17 @@ public class ExampleDBTests {
         sendCommandToServer("INSERT INTO employees VALUES ('Alex', 6000);");
         sendCommandToServer("INSERT INTO employees VALUES ('Peter', 6600);");
 
-
         sendCommandToServer("DELETE FROM employees WHERE name == 'Bob';");
 
         String response = sendCommandToServer("SELECT * FROM employees;");
         assertFalse(response.contains("Bob"), "Bob was deleted but still appears in SELECT results.");
         assertTrue(response.contains("Alice"), "Alice should not be deleted but is missing from SELECT results.");
 
-        sendCommandToServer("DELETE FROM employees WHERE salary < 5000;");
+        sendCommandToServer("DELETE FROM employees WHERE salary <= 5000;");
         String response2 = sendCommandToServer("SELECT * FROM employees;");
         assertFalse(response2.contains("Bob"), "Bob was deleted but still appears in SELECT results.");
         assertFalse(response2.contains("Alice"), "Alice was deleted but still appears in SELECT results.");
         assertTrue(response2.contains("Alex"), "Alex should not be deleted but is missing from SELECT results.");
-
 
     }
 
@@ -154,9 +169,9 @@ public class ExampleDBTests {
         sendCommandToServer("USE " + randomName + ";");
         sendCommandToServer("CREATE TABLE products (name, price);");
         sendCommandToServer("INSERT INTO products VALUES ('Laptop', 1000);");
-        
+
         sendCommandToServer("UPDATE products SET price = 1200 WHERE name == 'Laptop';");
-        
+
         String response = sendCommandToServer("SELECT * FROM products;");
         assertTrue(response.contains("1200"), "Laptop's price was updated to 1200, but not found in SELECT results.");
         assertFalse(response.contains("1000"), "Old price 1000 should have been updated, but still exists.");
@@ -171,23 +186,25 @@ public class ExampleDBTests {
         sendCommandToServer("CREATE TABLE customers (customer_id, name);");
         sendCommandToServer("INSERT INTO orders VALUES (1, 101);");
         sendCommandToServer("INSERT INTO customers VALUES (101, 'John Doe');");
-    
+
         String response = sendCommandToServer("JOIN orders AND customers ON customer_id AND customer_id;");
-        assertTrue(response.contains("John Doe"), "Customer 'John Doe' should appear in the join result but is missing.");
+        assertTrue(response.contains("John Doe"),
+                "Customer 'John Doe' should appear in the join result but is missing.");
         assertTrue(response.contains("1"), "Order ID '1' should appear in the join result but is missing.");
     }
-    
+
     @Test
     public void testInvalidSQL() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
         sendCommandToServer("USE " + randomName + ";");
-    
+
         String response = sendCommandToServer("CREAT TABLE students (name, age);");
         assertTrue(response.contains("[ERROR]"), "An invalid SQL command was used, but no [ERROR] tag was returned.");
-    
+
         response = sendCommandToServer("INSERT INTO students ('Alice', 20);");
-        assertTrue(response.contains("[ERROR]"), "An invalid INSERT statement was used, but no [ERROR] tag was returned.");
+        assertTrue(response.contains("[ERROR]"),
+                "An invalid INSERT statement was used, but no [ERROR] tag was returned.");
     }
 
     // NULL -> store "" in db
@@ -219,7 +236,7 @@ public class ExampleDBTests {
     }
 
     @Test
-    public void testAdvanceWhereQuery(){
+    public void testAdvanceWhereQuery() {
         String randomName = generateRandomName();
         sendCommandToServer("CREATE DATABASE " + randomName + ";");
         sendCommandToServer("USE " + randomName + ";");
@@ -235,11 +252,12 @@ public class ExampleDBTests {
         assertFalse(response.contains("Alice"), "Alice should not appears in SELECT results.");
 
         // OK
-        // String response2 = sendCommandToServer("SELECT * FROM employees WHERE name LIKE 'A' AND (salary > 5000 OR name == 'Bob');");
-        
-        //FIXME:ERROR
-        // String response2 = sendCommandToServer("SELECT * FROM employees WHERE name LIKE 'A' AND salary > 5000 OR name == 'Bob';");
+        // String response2 = sendCommandToServer("SELECT * FROM employees WHERE name
+        // LIKE 'A' AND (salary > 5000 OR name == 'Bob');");
 
-        
+        // FIXME:ERROR
+        // String response2 = sendCommandToServer("SELECT * FROM employees WHERE name
+        // LIKE 'A' AND salary > 5000 OR name == 'Bob';");
+
     }
 }

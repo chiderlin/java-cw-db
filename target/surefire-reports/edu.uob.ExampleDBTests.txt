@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: edu.uob.ExampleDBTests
 -------------------------------------------------------------------------------
-Tests run: 12, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.179 s <<< FAILURE! - in edu.uob.ExampleDBTests
-edu.uob.ExampleDBTests.testDeleteData  Time elapsed: 0.019 s  <<< FAILURE!
+Tests run: 12, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.116 s <<< FAILURE! - in edu.uob.ExampleDBTests
+edu.uob.ExampleDBTests.testDeleteData  Time elapsed: 0.01 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: Alice was deleted but still appears in SELECT results. ==> expected: <false> but was: <true>
 	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
 	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:40)
