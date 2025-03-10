@@ -475,6 +475,8 @@ public class Database {
     boolean updated = false;
     for (int i = 1; i < table.size(); i++) {
         Map<String, String> row = convertRowToMap(table.get(i), header);
+        System.out.println("[INFO] conditionTree.evaluate(row): " + conditionTree.evaluate(row));
+        System.out.println("[INFO] row: " + row);
         if (conditionTree.evaluate(row)) {
             table.get(i).set(deleteIdx, "TRUE"); // delete
             updated = true;

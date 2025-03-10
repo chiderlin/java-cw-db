@@ -30,7 +30,7 @@ public class DatabaseManager {
         this.currentDbName = dbName;
         this.currentDatabase = new Database(dbName);
 
-        System.out.println("Switch database: " + dbName + " successfully.");
+        System.out.println("[INFO] Switch database: " + dbName + " successfully.");
         return "[OK]";
     } catch(Exception e){
         System.err.println("[ERROR] useDatabase: " + e.getMessage());
@@ -84,7 +84,11 @@ public class DatabaseManager {
 
 
   public String createDatabase(String dbName){
-    File createDb = new File("."+File.separator+"databases"+File.separator + dbName);
+    System.out.println("before dbName: " + dbName);
+    String normalizeDbName = dbName.replaceAll(";$", "").trim();
+    System.out.println("after normalizeDbName: " + normalizeDbName);
+
+    File createDb = new File("."+File.separator+"databases"+File.separator + normalizeDbName);
     if(!createDb.exists()){
         createDb.mkdirs();
         System.out.println("File created: " + createDb.getName());

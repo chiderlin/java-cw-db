@@ -102,4 +102,117 @@ public class ExampleDBTests {
         assertFalse(response.contains("[OK]"), "An attempt was made to access a non-existent table, however an [OK] tag was returned");
     }
 
+    @Test
+    public void testAlterTable() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE students (name, age);");
+
+        sendCommandToServer("ALTER TABLE students ADD grade;");
+        String response = sendCommandToServer("SELECT * FROM students;");
+        assertTrue(response.contains("grade"), "The column 'grade' was added, but not found in the table schema.");
+
+        sendCommandToServer("ALTER TABLE students DROP age;");
+        response = sendCommandToServer("SELECT * FROM students;");
+        assertFalse(response.contains("age"), "The column 'age' was dropped, but still found in the table schema.");
+    }
+
+    @Test
+    public void testDeleteData() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE employees (name, salary);");
+        sendCommandToServer("INSERT INTO employees VALUES ('Alice', 4000);");
+        sendCommandToServer("INSERT INTO employees VALUES ('Bob', 4500);");
+        sendCommandToServer("INSERT INTO employees VALUES ('Alex', 6000);");
+        sendCommandToServer("INSERT INTO employees VALUES ('Peter', 6600);");
+
+
+        sendCommandToServer("DELETE FROM employees WHERE name == 'Bob';");
+
+        String response = sendCommandToServer("SELECT * FROM employees;");
+        assertFalse(response.contains("Bob"), "Bob was deleted but still appears in SELECT results.");
+        assertTrue(response.contains("Alice"), "Alice should not be deleted but is missing from SELECT results.");
+
+        sendCommandToServer("DELETE FROM employees WHERE salary <= 5000;");
+        String response2 = sendCommandToServer("SELECT * FROM employees;");
+        assertFalse(response2.contains("Bob"), "Bob was deleted but still appears in SELECT results.");
+        assertFalse(response2.contains("Alice"), "Alice was deleted but still appears in SELECT results.");
+        assertTrue(response2.contains("Alex"), "Alex should not be deleted but is missing from SELECT results.");
+
+
+    }
+
+    @Test
+    public void testUpdateData() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE products (name, price);");
+        sendCommandToServer("INSERT INTO products VALUES ('Laptop', 1000);");
+        
+        sendCommandToServer("UPDATE products SET price = 1200 WHERE name == 'Laptop';");
+        
+        String response = sendCommandToServer("SELECT * FROM products;");
+        assertTrue(response.contains("1200"), "Laptop's price was updated to 1200, but not found in SELECT results.");
+        assertFalse(response.contains("1000"), "Old price 1000 should have been updated, but still exists.");
+    }
+
+    @Test
+    public void testJoinTables() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE orders (order_id, customer_id);");
+        sendCommandToServer("CREATE TABLE customers (customer_id, name);");
+        sendCommandToServer("INSERT INTO orders VALUES (1, 101);");
+        sendCommandToServer("INSERT INTO customers VALUES (101, 'John Doe');");
+    
+        String response = sendCommandToServer("JOIN orders AND customers ON customer_id AND customer_id;");
+        assertTrue(response.contains("John Doe"), "Customer 'John Doe' should appear in the join result but is missing.");
+        assertTrue(response.contains("1"), "Order ID '1' should appear in the join result but is missing.");
+    }
+    
+    @Test
+    public void testInvalidSQL() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
+    
+        String response = sendCommandToServer("CREAT TABLE students (name, age);");
+        assertTrue(response.contains("[ERROR]"), "An invalid SQL command was used, but no [ERROR] tag was returned.");
+    
+        response = sendCommandToServer("INSERT INTO students ('Alice', 20);");
+        assertTrue(response.contains("[ERROR]"), "An invalid INSERT statement was used, but no [ERROR] tag was returned.");
+    }
+
+    // NULL -> store "" in db
+    @Test
+    public void testNullValues() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE employees (name, salary);");
+
+        sendCommandToServer("INSERT INTO employees VALUES ('Alice', NULL);");
+        sendCommandToServer("INSERT INTO employees VALUES (NULL, 5000);");
+
+        String response = sendCommandToServer("SELECT * FROM employees;");
+        assertTrue(response.contains(""), "Inserted NULL values, but they were not returned in SELECT.");
+    }
+
+    @Test
+    public void testCaseInsensitiveSQL() {
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE students (name, age);");
+        sendCommandToServer("INSERT INTO students VALUES ('Alice', 20);");
+
+        String response1 = sendCommandToServer("select * from students;");
+        String response2 = sendCommandToServer("SeLeCt * FROM students;");
+        assertTrue(response1.equals(response2), "SQL should be case insensitive, but results differ.");
+    }
 }

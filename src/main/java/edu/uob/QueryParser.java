@@ -36,6 +36,9 @@ public class QueryParser {
           case "SELECT":
             return new SelectCommand(db, rawCommand);
 
+          case "UPDATE":
+            return new UpdateCommand(db, rawCommand);
+
           case "DELETE":
             return new DeleteCommand(db, rawCommand);
 
@@ -66,10 +69,10 @@ public class QueryParser {
     String operator = whereClause.substring(lastIndex, lastIndex+3).trim();
     String rightPart = whereClause.substring(lastIndex+3).trim();
 
-    System.out.println("Splitting condition:");
-    System.out.println("Left: " + leftPart);
-    System.out.println("Operator: " + operator);
-    System.out.println("Right: " + rightPart);
+    System.out.println("[INFO] Splitting condition:");
+    System.out.println("[INFO] Left: " + leftPart);
+    System.out.println("[INFO] Operator: " + operator);
+    System.out.println("[INFO] Right: " + rightPart);
 
     // recurse left/right side.
     return new ConditionNode(operator, parseWhere(leftPart), parseWhere(rightPart));

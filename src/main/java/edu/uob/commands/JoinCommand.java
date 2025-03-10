@@ -48,7 +48,7 @@ public class JoinCommand extends DBCommand {
         System.out.println(resultString);
         return "[OK]\n" + resultString;
     } catch(Exception e){
-        System.out.println("[ERROR] parseJoin: " + e.getMessage());
+        System.err.println("[ERROR] parseJoin: " + e.getMessage());
         return "[ERROR] parseJoin: " + e.getMessage();
     }
   }

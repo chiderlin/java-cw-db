@@ -14,17 +14,20 @@ public class DatabaseCommand extends DBCommand{
   public String execute(){
     String formatCommand = this.cmd.trim().toUpperCase();
 
-    if (formatCommand.startsWith("USE ")) {
-        return dbManager.useDatabase(cmd.substring(4).trim());
+    if (formatCommand.matches("(?i)^USE\\s+\\w+;$")) {
+        String normalizeDbName = cmd.substring(4).replaceAll(";$", "").trim();
+        return dbManager.useDatabase(normalizeDbName);
 
-    } else if (formatCommand.startsWith("DROP DATABASE ")) {
-        return dbManager.dropDatabase(cmd.substring(14).trim());
+    } else if (formatCommand.matches("(?i)^DROP\\s+DATABASE\\s+\\w+;$")) {
+        String normalizeDbName = cmd.substring(14).replaceAll(";$", "").trim();
+        return dbManager.dropDatabase(normalizeDbName);
 
-    } else if (formatCommand.startsWith("SHOW DATABASES")) {
+    } else if (formatCommand.matches("(?i)^SHOW\\s+DATABASES;$")) {
         return dbManager.showDatabase();
 
-    } else if(formatCommand.startsWith("CREATE DATABASE ")){
-        return dbManager.createDatabase(cmd.substring(16).trim());
+    } else if(formatCommand.matches("(?i)^CREATE\\s+DATABASE\\s+\\w+;$")){
+        String normalizeDbName = cmd.substring(16).replaceAll(";$", "").trim();
+        return dbManager.createDatabase(normalizeDbName);
 
     }
 

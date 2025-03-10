@@ -28,6 +28,9 @@ public class UpdateCommand extends DBCommand {
 
           // UPDATE syntax
           String[] updateParts = cmd.split("(?i)\\s+SET\\s+", 2);
+          System.out.println(updateParts[0]);
+          System.out.println(updateParts[1]);
+
           String tableName = updateParts[0].split("\\s+")[1].trim();
           
           // SET syntax
@@ -55,7 +58,7 @@ public class UpdateCommand extends DBCommand {
           return db.updateData(tableName, updates, conditionTree);
 
       } catch (Exception e) {
-          System.out.println("[ERROR] parseUpdate: " + e.getMessage());
+          System.err.println("[ERROR] parseUpdate: " + e.getMessage());
           return "[ERROR] parseSelect: " + e.getMessage();
       }
     }

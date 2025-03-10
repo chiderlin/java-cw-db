@@ -10,7 +10,7 @@ public class AlterCommand extends DBCommand{
   @Override
   public String execute(){
     if(db == null){
-      System.out.println("[ERROR] Switch database required.");
+      System.err.println("[ERROR] Switch database required.");
       return "[ERROR] Switch database required.";
     }
     try{
@@ -23,11 +23,11 @@ public class AlterCommand extends DBCommand{
         String tableName = parts[2];
         String action = parts[3];
         String columnName = parts[4];
-        System.out.println("parts: "+parts[4]);
+        System.out.println("[INFO] parts: "+parts[4]);
         return db.alterData(tableName, action, columnName);
 
     }catch(Exception e){
-        System.out.println("[ERROR] parseAlter: " + e.getMessage());
+        System.err.println("[ERROR] parseAlter: " + e.getMessage());
         return "[ERROR] parseAlter: " + e.getMessage();
     }
   }
