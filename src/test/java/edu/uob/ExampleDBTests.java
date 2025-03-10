@@ -215,4 +215,29 @@ public class ExampleDBTests {
         String response2 = sendCommandToServer("SeLeCt * FROM students;");
         assertTrue(response1.equals(response2), "SQL should be case insensitive, but results differ.");
     }
+
+    @Test
+    public void testAdvanceWhereQuery(){
+        String randomName = generateRandomName();
+        sendCommandToServer("CREATE DATABASE " + randomName + ";");
+        sendCommandToServer("USE " + randomName + ";");
+        sendCommandToServer("CREATE TABLE employees (name, salary);");
+        sendCommandToServer("INSERT INTO employees VALUES ('Alice', 4000);");
+        sendCommandToServer("INSERT INTO employees VALUES ('Bob', 4500);");
+        sendCommandToServer("INSERT INTO employees VALUES ('Alex', 6000);");
+        sendCommandToServer("INSERT INTO employees VALUES ('Peter', 6600);");
+        sendCommandToServer("INSERT INTO employees VALUES ('Amy', 5500);");
+
+        String response = sendCommandToServer("SELECT * FROM employees WHERE name LIKE 'b';");
+        assertTrue(response.contains("Bob"), "Bob should appears in SELECT results.");
+        assertFalse(response.contains("Alice"), "Alice should not appears in SELECT results.");
+
+        // OK
+        // String response2 = sendCommandToServer("SELECT * FROM employees WHERE name LIKE 'A' AND (salary > 5000 OR name == 'Bob');");
+        
+        //FIXME:ERROR
+        String response2 = sendCommandToServer("SELECT * FROM employees WHERE name LIKE 'A' AND salary > 5000 OR name == 'Bob';");
+
+        
+    }
 }

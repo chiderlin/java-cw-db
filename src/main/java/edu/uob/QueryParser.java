@@ -56,7 +56,13 @@ public class QueryParser {
   public static ConditionNode parseWhere(String whereClause){
     whereClause = whereClause.trim();
 
-    // single condition -> where name == 'bob';
+
+    if(whereClause.startsWith("(") && whereClause.endsWith(")")){
+      System.out.println("[INFO] Detected Brackets: " + whereClause);
+      return parseWhere(whereClause.substring(1, whereClause.length()-1));
+    }
+
+    // single condition -> where name == 'Bob';
     if(!whereClause.matches("(?i).*\\s(AND|OR)\\s.*")) {
       System.out.println("Single condition detected: " + whereClause);
       return new ConditionNode(whereClause);
