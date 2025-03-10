@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class TableIO {
-  private String dbName;
+  final private String dbName;
   
   public TableIO(String dbName){
     this.dbName = dbName;
@@ -30,7 +30,7 @@ public class TableIO {
         String lineData = buffReader.readLine();
         if(lineData == null){
           System.out.println("[ERROR] File is empty " + fileName);
-          buffReader.close();
+          // buffReader.close();
           return Collections.emptyList();
         }
 

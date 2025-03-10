@@ -7,13 +7,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import edu.uob.commands.DBCommand;
 
 /** This class implements the DB server. */
 public class DBServer {
     private static final char END_OF_TRANSMISSION = 4;
     // private String storageFolderPath;
-    private DatabaseManager dbManager;
+    final private DatabaseManager dbManager;
 
     public static void main(String args[]) throws IOException {
         DBServer server = new DBServer();
@@ -56,7 +57,7 @@ public class DBServer {
                     blockingHandleConnection(s);
                 } catch (IOException e) {
                     System.err.println("Server encountered a non-fatal IO error:");
-                    e.printStackTrace();
+                    // e.printStackTrace();
                     System.err.println("Continuing...");
                 }
             }

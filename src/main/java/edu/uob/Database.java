@@ -1,18 +1,18 @@
 package edu.uob;
 
 import java.io.File;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
 public class Database {
-  private static final char END_OF_TRANSMISSION = 4;
-  private String dbName;
-  private HashMap<String, List<List<String>>> tables = new HashMap<>(); // type 2
+  // private static final char END_OF_TRANSMISSION = 4;
+  final private String dbName;
+  final private HashMap<String, List<List<String>>> tables = new HashMap<>(); // type 2
   /**
    * tables = {
    *  users:[[1,'bob',21,'bob@bob.net'],[2,'bob',21,'bob@bob.net'],[1,'bob',21,'bob@bob.net']]
@@ -29,37 +29,37 @@ public class Database {
     return this.dbName;
   }
 
-  public static void main(String args[]) {
-    Database db = new Database("test");
-    db.loadTableData("sheds");
-    db._printTable("sheds");
+  // public static void main(String args[]) {
+  //   Database db = new Database("test");
+  //   db.loadTableData("sheds");
+  //   db._printTable("sheds");
 
-    // --- test insert data -------
-    List<String> values = new ArrayList<>();
-    values.add("test");
-    values.add("1000");
-    values.add("2");
-    db.insertData("sheds",values);
-    // --- test insert data -------
+  //   // --- test insert data -------
+  //   List<String> values = new ArrayList<>();
+  //   values.add("test");
+  //   values.add("1000");
+  //   values.add("2");
+  //   db.insertData("sheds",values);
+  //   // --- test insert data -------
 
-    // --- test create table ------
-    List<String> cols = new ArrayList<>();
-    cols.add("name");
-    cols.add("mark");
-    cols.add("pass");
-    // String pathStr = Paths.get("databases"+File.separator+"test").toAbsolutePath().toString();
-    // Path path = Paths.get(pathStr);
-    // db.createTable("test", path, cols);
-    // --- test create table ------
+  //   // --- test create table ------
+  //   List<String> cols = new ArrayList<>();
+  //   cols.add("name");
+  //   cols.add("mark");
+  //   cols.add("pass");
+  //   // String pathStr = Paths.get("databases"+File.separator+"test").toAbsolutePath().toString();
+  //   // Path path = Paths.get(pathStr);
+  //   // db.createTable("test", path, cols);
+  //   // --- test create table ------
 
-    // --- test getData (select syntax) ------
-    List<String> returncols = new ArrayList<>();
-    returncols.add("id");
-    returncols.add("Name");
-    // List<String> 
-    // db.getData("sheds",returncols,)
-    // --- test getData (select syntax) ------
-  }
+  //   // --- test getData (select syntax) ------
+  //   List<String> returncols = new ArrayList<>();
+  //   returncols.add("id");
+  //   returncols.add("Name");
+  //   // List<String> 
+  //   // db.getData("sheds",returncols,)
+  //   // --- test getData (select syntax) ------
+  // }
 
 
 
@@ -75,7 +75,6 @@ public class Database {
       
     } catch(Exception e){
       System.err.println("[ERROR] " + e.getMessage());
-      return ;
     }
   }
 
@@ -145,7 +144,7 @@ public class Database {
       System.err.println("[ERROR] Table not found: " + tableName);
       return "[ERROR] Table not found: " + tableName;
     }
-    List<String> newData = new ArrayList<String>();
+    List<String> newData = new ArrayList<>();
     String id = this.getNewId(table);
     newData.add(id);
     newData.addAll(values); //[name, height, purchaserID]
@@ -214,15 +213,15 @@ public class Database {
     }
 
     // get set col index
-    List<Integer> updateIndices = new ArrayList<>();
-    for (String column : updatesUpper.keySet()) {
-        int colIdx = headerUpper.indexOf(column);
-        if (colIdx == -1) {
-            System.err.println("[ERROR] Column " + column + " not found in table " + tableName);
-            return "[ERROR] Column " + column + " not found in table " + tableName;
-        }
-        updateIndices.add(colIdx);
-    }
+    // List<Integer> updateIndices = new ArrayList<>();
+    // for (String column : updatesUpper.keySet()) {
+    //     int colIdx = headerUpper.indexOf(column);
+    //     if (colIdx == -1) {
+    //         System.err.println("[ERROR] Column " + column + " not found in table " + tableName);
+    //         return "[ERROR] Column " + column + " not found in table " + tableName;
+    //     }
+    //     updateIndices.add(colIdx);
+    // }
 
     // compare value
     for (int i = 1; i < table.size(); i++) {
@@ -413,7 +412,6 @@ public class Database {
 
         } catch(Exception e){
           System.err.println("[ERROR] Failed to add column to row " + i + ": " + e.getMessage());
-          continue;
         }
       }
 

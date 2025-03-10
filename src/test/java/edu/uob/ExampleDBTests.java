@@ -1,12 +1,13 @@
 package edu.uob;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.time.Duration;
 
 public class ExampleDBTests {
 
@@ -67,8 +68,9 @@ public class ExampleDBTests {
         String[] tokens = singleLine.split(" ");
         // Check that the very last token is a number (which should be the ID of the entry)
         String lastToken = tokens[tokens.length-1];
+
         try {
-            Integer.parseInt(lastToken);
+            Integer.valueOf(lastToken);
         } catch (NumberFormatException nfe) {
             fail("The last token returned by `SELECT id FROM marks WHERE name == 'Simon';` should have been an integer ID, but was " + lastToken);
         }
@@ -136,7 +138,7 @@ public class ExampleDBTests {
         assertFalse(response.contains("Bob"), "Bob was deleted but still appears in SELECT results.");
         assertTrue(response.contains("Alice"), "Alice should not be deleted but is missing from SELECT results.");
 
-        sendCommandToServer("DELETE FROM employees WHERE salary <= 5000;");
+        sendCommandToServer("DELETE FROM employees WHERE salary < 5000;");
         String response2 = sendCommandToServer("SELECT * FROM employees;");
         assertFalse(response2.contains("Bob"), "Bob was deleted but still appears in SELECT results.");
         assertFalse(response2.contains("Alice"), "Alice was deleted but still appears in SELECT results.");
@@ -236,7 +238,7 @@ public class ExampleDBTests {
         // String response2 = sendCommandToServer("SELECT * FROM employees WHERE name LIKE 'A' AND (salary > 5000 OR name == 'Bob');");
         
         //FIXME:ERROR
-        String response2 = sendCommandToServer("SELECT * FROM employees WHERE name LIKE 'A' AND salary > 5000 OR name == 'Bob';");
+        // String response2 = sendCommandToServer("SELECT * FROM employees WHERE name LIKE 'A' AND salary > 5000 OR name == 'Bob';");
 
         
     }

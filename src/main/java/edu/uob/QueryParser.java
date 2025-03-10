@@ -1,6 +1,14 @@
 package edu.uob;
 
-import edu.uob.commands.*;
+import edu.uob.commands.AlterCommand;
+import edu.uob.commands.DBCommand;
+import edu.uob.commands.DatabaseCommand;
+import edu.uob.commands.DeleteCommand;
+import edu.uob.commands.InsertCommand;
+import edu.uob.commands.JoinCommand;
+import edu.uob.commands.SelectCommand;
+import edu.uob.commands.TableCommand;
+import edu.uob.commands.UpdateCommand;
 
 public class QueryParser {
 
@@ -25,32 +33,42 @@ public class QueryParser {
         }
 
         String commandType = formatCommand.split(" ")[0];
-        switch(commandType){
-          case "CREATE":
-          case "DROP":
-            return new TableCommand(db, rawCommand);
+        // switch(commandType){
+        //   case "CREATE":
+        //   case "DROP":
+        //     return new TableCommand(db, rawCommand);
           
-          case "INSERT":
-            return new InsertCommand(db, rawCommand);
+        //   case "INSERT":
+        //     return new InsertCommand(db, rawCommand);
 
-          case "SELECT":
-            return new SelectCommand(db, rawCommand);
+        //   case "SELECT":
+        //     return new SelectCommand(db, rawCommand);
 
-          case "UPDATE":
-            return new UpdateCommand(db, rawCommand);
+        //   case "UPDATE":
+        //     return new UpdateCommand(db, rawCommand);
 
-          case "DELETE":
-            return new DeleteCommand(db, rawCommand);
+        //   case "DELETE":
+        //     return new DeleteCommand(db, rawCommand);
 
-          case "ALTER":
-            return new AlterCommand(db, rawCommand);
+        //   case "ALTER":
+        //     return new AlterCommand(db, rawCommand);
 
-          case "JOIN":
-            return new JoinCommand(db, rawCommand);
+        //   case "JOIN":
+        //     return new JoinCommand(db, rawCommand);
           
-          default:
-            return null;
-        }
+        //   default:
+        //     return null;
+        // }
+        return switch (commandType) {
+            case "CREATE", "DROP" -> new TableCommand(db, rawCommand);
+            case "INSERT" -> new InsertCommand(db, rawCommand);
+            case "SELECT" -> new SelectCommand(db, rawCommand);
+            case "UPDATE" -> new UpdateCommand(db, rawCommand);
+            case "DELETE" -> new DeleteCommand(db, rawCommand);
+            case "ALTER" -> new AlterCommand(db, rawCommand);
+            case "JOIN" -> new JoinCommand(db, rawCommand);
+            default -> null;
+        };
     }
 
   public static ConditionNode parseWhere(String whereClause){

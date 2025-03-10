@@ -55,10 +55,10 @@ public class ConditionNode {
     System.out.println("[INFO] rowValue: " + rowValue);
     
     if(rowValue == null) return false;
-    String operator = condition.replaceAll("^.*?\\s*(<=|>=|==|!=|>|<|LIKE)\\s*.*$", "$1");
+    String extractOperator = condition.replaceAll("^.*?\\s*(<=|>=|==|!=|>|<|LIKE)\\s*.*$", "$1");
     
     // LIKE: case sensitive
-    if(operator.equals("LIKE")){ 
+    if(extractOperator.equals("LIKE")){ 
       return rowValue.contains(value);
     }
 
@@ -79,7 +79,7 @@ public class ConditionNode {
     }
     
     // if not number, do sting 
-    return switch(operator){
+    return switch(extractOperator){
       case "==" -> rowValue.equals(value);
       case "!=" -> !rowValue.equals(value);
       default -> false;
