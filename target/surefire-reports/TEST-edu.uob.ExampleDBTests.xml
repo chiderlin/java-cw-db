@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="edu.uob.ExampleDBTests" time="0.116" tests="12" errors="0" skipped="0" failures="1">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="edu.uob.ExampleDBTests" time="0.114" tests="12" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,8 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="TW"/>
     <property name="sun.boot.library.path" value="/Users/chider/Library/Java/JavaVirtualMachines/temurin-17.0.13/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter11324449264893401701.jar /Users/chider/code/bristol/cw-db/target/surefire 2025-03-10T16-58-39_882-jvmRun1 surefire5246339619477053707tmp surefire_08331602641306778770tmp"/>
-    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="sun.java.command" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter4508844496797672814.jar /Users/chider/code/bristol/cw-db/target/surefire 2025-03-11T01-47-13_273-jvmRun1 surefire197458641088212277tmp surefire_02896567276133323761tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="test" value="edu.uob.ExampleDBTests"/>
     <property name="surefire.test.class.path" value="/Users/chider/code/bristol/cw-db/target/test-classes:/Users/chider/code/bristol/cw-db/target/classes:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/chider/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/chider/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite/1.8.2/junit-platform-suite-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-api/1.8.2/junit-platform-suite-api-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.8.2/junit-platform-suite-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.8.2/junit-platform-suite-commons-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar:"/>
@@ -27,11 +26,10 @@
     <property name="basedir" value="/Users/chider/code/bristol/cw-db"/>
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="line.separator" value="&#10;"/>
-    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter11324449264893401701.jar"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter4508844496797672814.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
-    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="17.0.13+11"/>
     <property name="user.name" value="chider"/>
     <property name="path.separator" value=":"/>
@@ -54,560 +52,118 @@
     <property name="java.vm.version" value="17.0.13+11"/>
     <property name="java.specification.maintenance.version" value="1"/>
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
-    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testAlterTable" classname="edu.uob.ExampleDBTests" time="0.033">
-    <system-out><![CDATA[before dbName: dvnehlyany
-after normalizeDbName: dvnehlyany
-File created: dvnehlyany
-[INFO] Switch database: dvnehlyany successfully.
-Parsed columns: [name, age]
+  <testcase name="testAlterTable" classname="edu.uob.ExampleDBTests" time="0.036">
+    <system-out><![CDATA[[INFO] File created: xjtelbqvwy
 [INFO] Write file successfully.
 [OK] Table students created with schema: [id, name, age, _DELETED]
-[INFO] parts: grade
-[INFO] Loaded table: students
-table :[[id, name, age, _DELETED]]
-table.size() 1
-print table <students>: [[id, name, age, _DELETED]]
-Column grade added successfully.
-header: [id, name, age, _DELETED, grade]
 [INFO] Write file successfully.
-[INFO] Loaded table: students
-table :[[id, name, age, _DELETED, grade]]
-table.size() 1
-print table <students>: [[id, name, age, _DELETED, grade]]
-selectedCols: [id, name, age, grade]
-id	name	age	grade
-[INFO] parts: age
-[INFO] Loaded table: students
-table :[[id, name, age, _DELETED, grade]]
-table.size() 1
-print table <students>: [[id, name, age, _DELETED, grade]]
 Column age dropped successfully.
 [INFO] Write file successfully.
-[INFO] Loaded table: students
-table :[[id, name, _DELETED, grade]]
-table.size() 1
-print table <students>: [[id, name, _DELETED, grade]]
-selectedCols: [id, name, grade]
-id	name	grade
 ]]></system-out>
   </testcase>
-  <testcase name="testUpdateData" classname="edu.uob.ExampleDBTests" time="0.014">
-    <system-out><![CDATA[before dbName: dompxugjrf
-after normalizeDbName: dompxugjrf
-File created: dompxugjrf
-[INFO] Switch database: dompxugjrf successfully.
-Parsed columns: [name, price]
+  <testcase name="testUpdateData" classname="edu.uob.ExampleDBTests" time="0.015">
+    <system-out><![CDATA[[INFO] File created: rmpuuupivb
 [INFO] Write file successfully.
 [OK] Table products created with schema: [id, name, price, _DELETED]
-[INFO] Loaded table: products
-table :[[id, name, price, _DELETED]]
-table.size() 1
-print table <products>: [[id, name, price, _DELETED]]
 [INFO] Write file successfully.
-UPDATE products
-price = 1200 WHERE name == 'Laptop'
-Single condition detected: name == 'Laptop'
-[INFO] Loaded table: products
-table :[[id, name, price, _DELETED], [1, Laptop, 1000, FALSE]]
-table.size() 2
-print table <products>: [[id, name, price, _DELETED], [1, Laptop, 1000, FALSE]]
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Laptop
-[INFO] rowValue: Laptop
-[INFO] str: Laptop
-[DEBUG] Evaluating condition: name == 'Laptop' -> true
 [OK] Updated row: [1, Laptop, 1200, FALSE]
 [INFO] Write file successfully.
 [OK] Table products updated successfully.
-[INFO] Loaded table: products
-table :[[id, name, price, _DELETED], [1, Laptop, 1200, FALSE]]
-table.size() 2
-print table <products>: [[id, name, price, _DELETED], [1, Laptop, 1200, FALSE]]
-selectedCols: [id, name, price]
-id	name	price
-1	Laptop	1200
 ]]></system-out>
   </testcase>
-  <testcase name="testAdvanceWhereQuery" classname="edu.uob.ExampleDBTests" time="0.009">
-    <system-out><![CDATA[before dbName: hwlkdfqeev
-after normalizeDbName: hwlkdfqeev
-File created: hwlkdfqeev
-[INFO] Switch database: hwlkdfqeev successfully.
-Parsed columns: [name, salary]
+  <testcase name="testAdvanceWhereQuery" classname="edu.uob.ExampleDBTests" time="0.012">
+    <system-out><![CDATA[[INFO] File created: wxyadjybgb
 [INFO] Write file successfully.
 [OK] Table employees created with schema: [id, name, salary, _DELETED]
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED]]
-table.size() 1
-print table <employees>: [[id, name, salary, _DELETED]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE]]
-table.size() 2
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE]]
-table.size() 3
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE]]
-table.size() 4
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-table.size() 5
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE], [5, Amy, 5500, FALSE]]
-table.size() 6
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE], [5, Amy, 5500, FALSE]]
-selectedCols: [id, name, salary]
-Single condition detected: name LIKE 'b'
-[INFO] parts: name LIKE
-[INFO] column: NAME
-[INFO] value: b
-[INFO] rowValue: Alice
-[DEBUG] Evaluating condition: name LIKE 'b' -> false
-[INFO] parts: name LIKE
-[INFO] column: NAME
-[INFO] value: b
-[INFO] rowValue: Bob
-[DEBUG] Evaluating condition: name LIKE 'b' -> true
-[INFO] parts: name LIKE
-[INFO] column: NAME
-[INFO] value: b
-[INFO] rowValue: Alex
-[DEBUG] Evaluating condition: name LIKE 'b' -> false
-[INFO] parts: name LIKE
-[INFO] column: NAME
-[INFO] value: b
-[INFO] rowValue: Peter
-[DEBUG] Evaluating condition: name LIKE 'b' -> false
-[INFO] parts: name LIKE
-[INFO] column: NAME
-[INFO] value: b
-[INFO] rowValue: Amy
-[DEBUG] Evaluating condition: name LIKE 'b' -> false
-id	name	salary
-2	Bob	4500
 ]]></system-out>
   </testcase>
-  <testcase name="testCaseInsensitiveSQL" classname="edu.uob.ExampleDBTests" time="0.005">
-    <system-out><![CDATA[before dbName: nbndmjpqvd
-after normalizeDbName: nbndmjpqvd
-File created: nbndmjpqvd
-[INFO] Switch database: nbndmjpqvd successfully.
-Parsed columns: [name, age]
+  <testcase name="testCaseInsensitiveSQL" classname="edu.uob.ExampleDBTests" time="0.004">
+    <system-out><![CDATA[[INFO] File created: aayyidblnj
 [INFO] Write file successfully.
 [OK] Table students created with schema: [id, name, age, _DELETED]
-[INFO] Loaded table: students
-table :[[id, name, age, _DELETED]]
-table.size() 1
-print table <students>: [[id, name, age, _DELETED]]
 [INFO] Write file successfully.
-[INFO] Loaded table: students
-table :[[id, name, age, _DELETED], [1, Alice, 20, FALSE]]
-table.size() 2
-print table <students>: [[id, name, age, _DELETED], [1, Alice, 20, FALSE]]
-selectedCols: [id, name, age]
-id	name	age
-1	Alice	20
-[INFO] Loaded table: students
-table :[[id, name, age, _DELETED], [1, Alice, 20, FALSE]]
-table.size() 2
-print table <students>: [[id, name, age, _DELETED], [1, Alice, 20, FALSE]]
-selectedCols: [id, name, age]
-id	name	age
-1	Alice	20
 ]]></system-out>
   </testcase>
-  <testcase name="testQueryID" classname="edu.uob.ExampleDBTests" time="0.005">
-    <system-out><![CDATA[before dbName: exucueorbr
-after normalizeDbName: exucueorbr
-File created: exucueorbr
-[INFO] Switch database: exucueorbr successfully.
-Parsed columns: [name, mark, pass]
+  <testcase name="testQueryID" classname="edu.uob.ExampleDBTests" time="0.003">
+    <system-out><![CDATA[[INFO] File created: olllwccipo
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED]]
-table.size() 1
-print table <marks>: [[id, name, mark, pass, _DELETED]]
 [INFO] Write file successfully.
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE]]
-table.size() 2
-print table <marks>: [[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE]]
-selectedCols: [id]
-Single condition detected: name == 'Simon'
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Simon
-[INFO] rowValue: Simon
-[INFO] str: Simon
-[DEBUG] Evaluating condition: name == 'Simon' -> true
-id
-1
 ]]></system-out>
   </testcase>
-  <testcase name="testBasicCreateAndQuery" classname="edu.uob.ExampleDBTests" time="0.005">
-    <system-out><![CDATA[randomName: fompwqbeqj
-before dbName: fompwqbeqj
-after normalizeDbName: fompwqbeqj
-File created: fompwqbeqj
-[INFO] Switch database: fompwqbeqj successfully.
-Parsed columns: [name, mark, pass]
+  <testcase name="testBasicCreateAndQuery" classname="edu.uob.ExampleDBTests" time="0.007">
+    <system-out><![CDATA[randomName: sfjhhrmxyf
+[INFO] File created: sfjhhrmxyf
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED]]
-table.size() 1
-print table <marks>: [[id, name, mark, pass, _DELETED]]
 [INFO] Write file successfully.
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE]]
-table.size() 2
-print table <marks>: [[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE], [2, Sion, 55, TRUE, FALSE]]
-table.size() 3
-print table <marks>: [[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE], [2, Sion, 55, TRUE, FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE], [2, Sion, 55, TRUE, FALSE], [3, Rob, 35, FALSE, FALSE]]
-table.size() 4
-print table <marks>: [[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE], [2, Sion, 55, TRUE, FALSE], [3, Rob, 35, FALSE, FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE], [2, Sion, 55, TRUE, FALSE], [3, Rob, 35, FALSE, FALSE], [4, Chris, 20, FALSE, FALSE]]
-table.size() 5
-print table <marks>: [[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE], [2, Sion, 55, TRUE, FALSE], [3, Rob, 35, FALSE, FALSE], [4, Chris, 20, FALSE, FALSE]]
-selectedCols: [id, name, mark, pass]
-id	name	mark	pass
-1	Simon	65	TRUE
-2	Sion	55	TRUE
-3	Rob	35	FALSE
-4	Chris	20	FALSE
 ]]></system-out>
   </testcase>
-  <testcase name="testJoinTables" classname="edu.uob.ExampleDBTests" time="0.005">
-    <system-out><![CDATA[before dbName: giyhorxhid
-after normalizeDbName: giyhorxhid
-File created: giyhorxhid
-[INFO] Switch database: giyhorxhid successfully.
-Parsed columns: [order_id, customer_id]
+  <testcase name="testJoinTables" classname="edu.uob.ExampleDBTests" time="0.006">
+    <system-out><![CDATA[[INFO] File created: pdbplfrosq
 [INFO] Write file successfully.
 [OK] Table orders created with schema: [id, order_id, customer_id, _DELETED]
-Parsed columns: [customer_id, name]
 [INFO] Write file successfully.
 [OK] Table customers created with schema: [id, customer_id, name, _DELETED]
-[INFO] Loaded table: orders
-table :[[id, order_id, customer_id, _DELETED]]
-table.size() 1
-print table <orders>: [[id, order_id, customer_id, _DELETED]]
 [INFO] Write file successfully.
-[INFO] Loaded table: customers
-table :[[id, customer_id, name, _DELETED]]
-table.size() 1
-print table <customers>: [[id, customer_id, name, _DELETED]]
 [INFO] Write file successfully.
-table1Name: orders
-table2Name: customers
-table1JoinCol: customer_id
-table2JoinCol: customer_id
-[INFO] Loaded table: orders
-[INFO] Loaded table: customers
-id	order_id	customer_id	id	customer_id	name
-1	1	101	101	John Doe	FALSE
+[INFO] Write file successfully.
+[INFO] Write file successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testDeleteData" classname="edu.uob.ExampleDBTests" time="0.01">
-    <failure type="org.opentest4j.AssertionFailedError"><![CDATA[org.opentest4j.AssertionFailedError: Alice was deleted but still appears in SELECT results. ==> expected: <false> but was: <true>
-	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
-	at org.junit.jupiter.api.AssertFalse.assertFalse(AssertFalse.java:40)
-	at org.junit.jupiter.api.Assertions.assertFalse(Assertions.java:235)
-	at edu.uob.ExampleDBTests.testDeleteData(ExampleDBTests.java:144)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:725)
-	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
-	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
-	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:149)
-	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:140)
-	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:84)
-	at org.junit.jupiter.engine.execution.ExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(ExecutableInvoker.java:115)
-	at org.junit.jupiter.engine.execution.ExecutableInvoker.lambda$invoke$0(ExecutableInvoker.java:105)
-	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
-	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
-	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
-	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
-	at org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(ExecutableInvoker.java:104)
-	at org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(ExecutableInvoker.java:98)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:214)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:210)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:135)
-	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:66)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
-	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
-	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
-	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
-	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
-	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
-	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
-	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
-	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
-	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
-	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
-	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
-	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
-	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:53)
-	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:188)
-	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:154)
-	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:128)
-	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:428)
-	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
-	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:562)
-	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:548)
-]]></failure>
-    <system-out><![CDATA[before dbName: ivdjwblica
-after normalizeDbName: ivdjwblica
-File created: ivdjwblica
-[INFO] Switch database: ivdjwblica successfully.
-Parsed columns: [name, salary]
+  <testcase name="testDeleteData" classname="edu.uob.ExampleDBTests" time="0.006">
+    <system-out><![CDATA[[INFO] File created: tfgghdfeyl
 [INFO] Write file successfully.
 [OK] Table employees created with schema: [id, name, salary, _DELETED]
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED]]
-table.size() 1
-print table <employees>: [[id, name, salary, _DELETED]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE]]
-table.size() 2
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE]]
-table.size() 3
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE]]
-table.size() 4
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE]]
 [INFO] Write file successfully.
-Single condition detected: name == 'Bob'
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-table.size() 5
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, FALSE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Bob
-[INFO] rowValue: Alice
-[INFO] str: Alice
-[DEBUG] Evaluating condition: name == 'Bob' -> false
-[INFO] conditionTree.evaluate(row): false
-[INFO] row: {SALARY=4000, ID=1, NAME=Alice, _DELETED=FALSE}
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Bob
-[INFO] rowValue: Alice
-[INFO] str: Alice
-[DEBUG] Evaluating condition: name == 'Bob' -> false
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Bob
-[INFO] rowValue: Bob
-[INFO] str: Bob
-[DEBUG] Evaluating condition: name == 'Bob' -> true
-[INFO] conditionTree.evaluate(row): true
-[INFO] row: {SALARY=4500, ID=2, NAME=Bob, _DELETED=FALSE}
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Bob
-[INFO] rowValue: Bob
-[INFO] str: Bob
-[DEBUG] Evaluating condition: name == 'Bob' -> true
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Bob
-[INFO] rowValue: Alex
-[INFO] str: Alex
-[DEBUG] Evaluating condition: name == 'Bob' -> false
-[INFO] conditionTree.evaluate(row): false
-[INFO] row: {SALARY=6000, ID=3, NAME=Alex, _DELETED=FALSE}
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Bob
-[INFO] rowValue: Alex
-[INFO] str: Alex
-[DEBUG] Evaluating condition: name == 'Bob' -> false
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Bob
-[INFO] rowValue: Peter
-[INFO] str: Peter
-[DEBUG] Evaluating condition: name == 'Bob' -> false
-[INFO] conditionTree.evaluate(row): false
-[INFO] row: {SALARY=6600, ID=4, NAME=Peter, _DELETED=FALSE}
-[INFO] parts: name ==
-[INFO] column: NAME
-[INFO] value: Bob
-[INFO] rowValue: Peter
-[INFO] str: Peter
-[DEBUG] Evaluating condition: name == 'Bob' -> false
 [INFO] Write file successfully.
 [OK] Deleted matching rows from table employees
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, TRUE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-table.size() 5
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, TRUE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-selectedCols: [id, name, salary]
-id	name	salary
-1	Alice	4000
-3	Alex	6000
-4	Peter	6600
-Single condition detected: salary < 5000
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, TRUE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-table.size() 5
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, TRUE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-[INFO] parts: salary <
-[INFO] column: SALARY
-[INFO] value: 5000
-[INFO] rowValue: 4000
-[INFO] str: 4000
-[INFO] str: 5000
-[INFO] num1: 4000.0
-[INFO] num2: 5000.0
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, TRUE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-table.size() 5
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, 4000, FALSE], [2, Bob, 4500, TRUE], [3, Alex, 6000, FALSE], [4, Peter, 6600, FALSE]]
-selectedCols: [id, name, salary]
-id	name	salary
-1	Alice	4000
-3	Alex	6000
-4	Peter	6600
+[INFO] Write file successfully.
+[OK] Deleted matching rows from table employees
 ]]></system-out>
   </testcase>
-  <testcase name="testNullValues" classname="edu.uob.ExampleDBTests" time="0.005">
-    <system-out><![CDATA[before dbName: iwvjkqhpbv
-after normalizeDbName: iwvjkqhpbv
-File created: iwvjkqhpbv
-[INFO] Switch database: iwvjkqhpbv successfully.
-Parsed columns: [name, salary]
+  <testcase name="testNullValues" classname="edu.uob.ExampleDBTests" time="0.003">
+    <system-out><![CDATA[[INFO] File created: uatavdhcct
 [INFO] Write file successfully.
 [OK] Table employees created with schema: [id, name, salary, _DELETED]
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED]]
-table.size() 1
-print table <employees>: [[id, name, salary, _DELETED]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, , FALSE]]
-table.size() 2
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, , FALSE]]
 [INFO] Write file successfully.
-[INFO] Loaded table: employees
-table :[[id, name, salary, _DELETED], [1, Alice, , FALSE], [2, , 5000, FALSE]]
-table.size() 3
-print table <employees>: [[id, name, salary, _DELETED], [1, Alice, , FALSE], [2, , 5000, FALSE]]
-selectedCols: [id, name, salary]
-id	name	salary
-1	Alice	
-2		5000
 ]]></system-out>
   </testcase>
-  <testcase name="testTablePersistsAfterRestart" classname="edu.uob.ExampleDBTests" time="0.004">
-    <system-out><![CDATA[before dbName: xwqayfbhdw
-after normalizeDbName: xwqayfbhdw
-File created: xwqayfbhdw
-[INFO] Switch database: xwqayfbhdw successfully.
-Parsed columns: [name, mark, pass]
+  <testcase name="testTablePersistsAfterRestart" classname="edu.uob.ExampleDBTests" time="0.002">
+    <system-out><![CDATA[[INFO] File created: nigetglyke
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED]]
-table.size() 1
-print table <marks>: [[id, name, mark, pass, _DELETED]]
 [INFO] Write file successfully.
-[INFO] Switch database: xwqayfbhdw successfully.
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE]]
-table.size() 2
-print table <marks>: [[id, name, mark, pass, _DELETED], [1, Simon, 65, TRUE, FALSE]]
-selectedCols: [id, name, mark, pass]
-id	name	mark	pass
-1	Simon	65	TRUE
 ]]></system-out>
   </testcase>
   <testcase name="testInvalidSQL" classname="edu.uob.ExampleDBTests" time="0.001">
-    <system-out><![CDATA[before dbName: rjnvoicbij
-after normalizeDbName: rjnvoicbij
-File created: rjnvoicbij
-[INFO] Switch database: rjnvoicbij successfully.
+    <system-out><![CDATA[[INFO] File created: uwosrocevt
 ]]></system-out>
     <system-err><![CDATA[[ERROR] Invalid INSERT syntax.
 ]]></system-err>
   </testcase>
   <testcase name="testForErrorTag" classname="edu.uob.ExampleDBTests" time="0.003">
-    <system-out><![CDATA[before dbName: vjyufuyofe
-after normalizeDbName: vjyufuyofe
-File created: vjyufuyofe
-[INFO] Switch database: vjyufuyofe successfully.
-Parsed columns: [name, mark, pass]
+    <system-out><![CDATA[[INFO] File created: uprhdeauol
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
-[INFO] Loaded table: marks
-table :[[id, name, mark, pass, _DELETED]]
-table.size() 1
-print table <marks>: [[id, name, mark, pass, _DELETED]]
 [INFO] Write file successfully.
-[ERROR] File not found: databases/vjyufuyofe/libraryfines.tab
-table :[]
-[ERROR _printTable] Table Not Found.
 ]]></system-out>
-    <system-err><![CDATA[[ERROR] Table libraryfines does not exist.
+    <system-err><![CDATA[[ERROR] File not found: databases/uprhdeauol/libraryfines.tab
+[ERROR] Table libraryfines does not exist.
 ]]></system-err>
   </testcase>
 </testsuite>
