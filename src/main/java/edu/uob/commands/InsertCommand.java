@@ -27,9 +27,15 @@ public class InsertCommand extends DBCommand {
       String valuesPart = parts[1].trim();
       valuesPart = valuesPart.replaceAll("^\\(|\\)$", "");
 
+      // List<String> values = Arrays.stream(valuesPart.split("\\s*,\\s*"))
+      // .map(value -> value.replaceAll("^'(.*)'$", "$1").trim()) // remove ''
+      // .map(value -> value.equalsIgnoreCase("null") ? null : value) // NULL to ""
+      // .collect(Collectors.toList());
+
+      // NULL → null,
+      // 'NULL' → "NULL"
       List<String> values = Arrays.stream(valuesPart.split("\\s*,\\s*"))
-          .map(value -> value.replaceAll("^'(.*)'$", "$1").trim()) // remove ''
-          .map(value -> value.equalsIgnoreCase("null") ? "" : value) // NULL to ""
+          .map(value -> value.matches("(?i)^NULL$") ? null : value.replaceAll("^'(.*)'$", "$1").trim())
           .collect(Collectors.toList());
 
       // execute insert
