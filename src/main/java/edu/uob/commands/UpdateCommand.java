@@ -21,7 +21,8 @@ public class UpdateCommand extends DBCommand {
 
         try {
             cmd = cmd.trim().replaceAll("\\s+", " "); // 清理空格
-            if (!cmd.matches("(?i)^UPDATE\\s+\\w+\\s+SET\\s+.+\\s+WHERE\\s+.+;$")) {
+            // !cmd.matches("(?i)^UPDATE\\s+\\w+\\s+SET\\s+.+\\s+WHERE\\s+.+;$")
+            if (!cmd.matches("(?i)^UPDATE\\s+\\w+\\s+SET\\s+.+(;|\\s+WHERE\\s+.+;$)")) {
                 System.err.println("[ERROR] Invalid UPDATE syntax.");
                 return "[ERROR] Invalid SELECT syntax.";
             }

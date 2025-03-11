@@ -162,7 +162,7 @@ public class Database {
 
     // format header to uppercase
     List<String> headerUpper = header.stream()
-        .map(String::toUpperCase)
+        .map(col -> col.toString().toUpperCase())
         .collect(Collectors.toList());
 
     // format value to uppercase
@@ -201,7 +201,7 @@ public class Database {
     List<List<String>> result = new ArrayList<>();
 
     List<String> selectedHeader = selectedIdx.stream()
-        .map(header::get) // select original header name
+        .map(idx -> header.get(idx)) // select original header name
         .collect(Collectors.toList());
     result.add(selectedHeader);
 

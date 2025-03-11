@@ -107,7 +107,7 @@ public class SelectCommand extends DBCommand {
                 Map<String, String> rowMap = Database.convertRowToMap(row, header);
                 if (conditionTree == null || conditionTree.evaluate(rowMap)) {
                     List<String> selectedRow = selectIdx.stream()
-                            .map(row::get)
+                            .map(idx -> row.get(idx))
                             .collect(Collectors.toList());
                     filteredTable.add(selectedRow);
                 }
