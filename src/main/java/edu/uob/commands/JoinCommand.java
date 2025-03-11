@@ -18,14 +18,14 @@ public class JoinCommand extends DBCommand {
     }
 
     try {
-      cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", "");
+      cmd = cmd.trim().replaceAll("\\s+", " ");
 
-      if (!cmd.matches("(?i)^JOIN\\s+\\w+\\s+AND\\s+\\w+\\s+ON\\s+\\w+\\s+AND\\s+\\w+$")) {
+      if (!cmd.matches("(?i)^JOIN\\s+\\w+\\s+AND\\s+\\w+\\s+ON\\s+\\w+\\s+AND\\s+\\w+;$")) {
         System.err.println("[ERROR] Invalid JOIN syntax.");
         return "[ERROR] Invalid JOIN syntax.";
       }
 
-      String[] parts = cmd.split(" (?i)AND "); // split by AND
+      String[] parts = cmd.replaceAll(";$", "").split(" (?i)AND "); // split by AND
       if (parts.length != 3) {
         System.err.println("[ERROR] Invalid JOIN syntax.");
         return "[ERROR] Invalid JOIN syntax.";
@@ -46,7 +46,7 @@ public class JoinCommand extends DBCommand {
       String resultString = result.stream()
           .map(row -> String.join("\t", row))
           .collect(Collectors.joining("\n"));
-      System.out.println(resultString);
+      // System.out.println(resultString);
       return "[OK]\n" + resultString;
     } catch (Exception e) {
       System.err.println("[ERROR] parseJoin: " + e.getMessage());

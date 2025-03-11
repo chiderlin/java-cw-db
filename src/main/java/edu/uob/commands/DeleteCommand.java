@@ -16,13 +16,13 @@ public class DeleteCommand extends DBCommand {
       return "[ERROR] Switch database required.";
     }
 
-    cmd = cmd.trim().replaceAll(";$", "").trim();
-    if (!cmd.matches("(?i)^DELETE\\s+FROM\\s+.+\\s+WHERE\\s+.+$")) {
+    cmd = cmd.trim().trim();
+    if (!cmd.matches("(?i)^DELETE\\s+FROM\\s+.+\\s+WHERE\\s+.+;$")) {
       System.err.println("[ERROR] Invalid DELETE syntax.");
       return "[ERROR] Invalid DELETE syntax.";
     }
 
-    String[] parts = cmd.split("(?i)WHERE");
+    String[] parts = cmd.replaceAll(";$", "").split("(?i)WHERE");
     String tableName = parts[0].replaceFirst("(?i)^DELETE\\s+FROM\\s+", "").trim();
     String whereClause = parts[1].trim();
 

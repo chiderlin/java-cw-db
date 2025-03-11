@@ -3,10 +3,15 @@ package edu.uob.commands;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import edu.uob.Database;
 
 public class TableCommand extends DBCommand {
+  private static final Set<String> RESERVED_KEYWORDS = Set.of(
+      "USE", "CREATE", "INSERT", "SELECT", "UPDATE", "ALTER", "DELETE",
+      "DROP", "JOIN", "AND", "OR", "LIKE", "TRUE", "FALSE", "ID", "_DELETED");
+
   public TableCommand(Database db, String command) {
     super(db, command);
   }
@@ -51,26 +56,31 @@ public class TableCommand extends DBCommand {
       System.err.println("[ERROR] No columns specified in CREATE TABLE.");
       return "[ERROR] No columns specified in CREATE TABLE.";
     }
+    for (String col : values) {
+      if (RESERVED_KEYWORDS.contains(col.toUpperCase())) {
+        return "[ERROR] Column name cannot be a reserved SQL keyword: " + col;
+      }
+    }
 
-    System.out.println("Parsed columns: " + values);
+    // System.out.println("Parsed columns: " + values);
     return db.createTable(tableName, values);
   }
 
   public String parsedropTable(String cmd) {
     if (db == null) {
-      System.out.println("[ERROR] Switch database required.");
+      System.err.println("[ERROR] Switch database required.");
       return "[ERROR] Switch database required.";
     }
 
-    cmd = cmd.trim().replaceAll(";$", "").trim();
-    if (!cmd.matches("(?i)^DROP\\s+TABLE\\s+.+$")) {
-      System.out.println("[ERROR] Invalid DROP TABLE syntax.");
+    cmd = cmd.trim().trim();
+    if (!cmd.matches("(?i)^DROP\\s+TABLE\\s+.+;$")) {
+      System.err.println("[ERROR] Invalid DROP TABLE syntax.");
       return "[ERROR] Invalid DROP TABLE syntax.";
     }
-    String tableName = cmd.replaceFirst("(?i)^DROP\\s+TABLE\\s+", "").trim();
+    String tableName = cmd.replaceAll(";$", "").replaceFirst("(?i)^DROP\\s+TABLE\\s+", "").trim();
 
     if (tableName.isEmpty()) {
-      System.out.println("[ERROR] Missing table name in DROP TABLE.");
+      System.err.println("[ERROR] Missing table name in DROP TABLE.");
       return "[ERROR] Missing table name in DROP TABLE.";
     }
 

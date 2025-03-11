@@ -22,15 +22,14 @@ public class TableIO {
     String fileName = String.format("databases/%s/%s.tab", this.dbName, tableName);
     File fileToOpen = new File(fileName);
     if (!fileToOpen.exists()) {
-      System.out.println("[ERROR] File not found: " + fileName);
+      System.err.println("[ERROR] File not found: " + fileName);
       return Collections.emptyList();
     }
 
     try (BufferedReader buffReader = new BufferedReader(new FileReader(fileToOpen))) {
       String lineData = buffReader.readLine();
       if (lineData == null) {
-        System.out.println("[ERROR] File is empty " + fileName);
-        // buffReader.close();
+        System.err.println("[ERROR] File is empty " + fileName);
         return Collections.emptyList();
       }
 
@@ -43,7 +42,7 @@ public class TableIO {
         tableData.add(row);
       }
 
-      System.out.println("[INFO] Loaded table: " + tableName);
+      // System.out.println("[INFO] Loaded table: " + tableName);
       return tableData;
 
     } catch (IOException e) {

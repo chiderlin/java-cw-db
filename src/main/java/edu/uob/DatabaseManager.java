@@ -29,7 +29,7 @@ public class DatabaseManager {
       this.currentDbName = dbName;
       this.currentDatabase = new Database(dbName);
 
-      System.out.println("[INFO] Switch database: " + dbName + " successfully.");
+      // System.out.println("[INFO] Switch database: " + dbName + " successfully.");
       return "[OK]";
     } catch (Exception e) {
       System.err.println("[ERROR] useDatabase: " + e.getMessage());
@@ -56,20 +56,22 @@ public class DatabaseManager {
     try {
       Path databasePath = Paths.get(storageFolderPath);
       String lastPart = databasePath.getFileName().toString();
+
       String parentPath = databasePath.getParent().getFileName().toString();
       if (lastPart.equals("databases") || !parentPath.equals("databases")) {
         System.err.println("[ERROR] dropDatabase: Not correct database name.");
         return "[ERROR] dropDatabase: Not correct database name.";
       }
-      File dir = new File(lastPart);
+      File dir = new File(storageFolderPath);
+
       TableIO tableIO = new TableIO(dbName);
       if (tableIO.deleteDir(dir)) {
         this.currentDatabase = null;
         this.currentDbName = null;
-        System.out.println("Drop database " + dir + " successfully.");
+        System.out.println("[INFO] Drop database " + dir + " successfully.");
         return "[OK]";
       } else {
-        System.out.println("[ERROR] dropDatabase: Drop failed.");
+        System.err.println("[ERROR] dropDatabase: Drop failed.");
         return "[ERROR] dropDatabase: Drop failed.";
       }
     } catch (Exception e) {
@@ -80,16 +82,14 @@ public class DatabaseManager {
   }
 
   public String createDatabase(String dbName) {
-    System.out.println("before dbName: " + dbName);
     String normalizeDbName = dbName.replaceAll(";$", "").trim();
-    System.out.println("after normalizeDbName: " + normalizeDbName);
 
     File createDb = new File("." + File.separator + "databases" + File.separator + normalizeDbName);
     if (!createDb.exists()) {
       createDb.mkdirs();
-      System.out.println("File created: " + createDb.getName());
+      System.out.println("[INFO] File created: " + createDb.getName());
     } else {
-      System.out.println("Database already exists.");
+      System.out.println("[INFO] Database already exists.");
     }
     return "[OK]";
   }

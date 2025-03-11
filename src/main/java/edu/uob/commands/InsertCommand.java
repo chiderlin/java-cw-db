@@ -14,13 +14,13 @@ public class InsertCommand extends DBCommand {
   @Override
   public String execute() {
     try {
-      cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", ""); // remove space & end ;
-      if (!cmd.matches("(?i)^INSERT INTO\\s+\\w+\\s+VALUES\\s*\\(.*\\)$")) {
+      cmd = cmd.trim().replaceAll("\\s+", " "); // remove space & end ;
+      if (!cmd.matches("(?i)^INSERT INTO\\s+\\w+\\s+VALUES\\s*\\(.*\\);$")) {
         System.err.println("[ERROR] Invalid INSERT syntax.");
         return "[ERROR] Invalid INSERT syntax.";
       }
 
-      String[] parts = cmd.split("(?i)VALUES", 2);
+      String[] parts = cmd.replaceAll(";$", "").split("(?i)VALUES", 2);
       String tableName = parts[0].replaceFirst("(?i)^INSERT INTO\\s+", "").trim();
 
       // remove end ()

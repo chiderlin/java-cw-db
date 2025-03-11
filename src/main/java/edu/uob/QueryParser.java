@@ -32,32 +32,7 @@ public class QueryParser {
     }
 
     String commandType = formatCommand.split(" ")[0];
-    // switch(commandType){
-    // case "CREATE":
-    // case "DROP":
-    // return new TableCommand(db, rawCommand);
 
-    // case "INSERT":
-    // return new InsertCommand(db, rawCommand);
-
-    // case "SELECT":
-    // return new SelectCommand(db, rawCommand);
-
-    // case "UPDATE":
-    // return new UpdateCommand(db, rawCommand);
-
-    // case "DELETE":
-    // return new DeleteCommand(db, rawCommand);
-
-    // case "ALTER":
-    // return new AlterCommand(db, rawCommand);
-
-    // case "JOIN":
-    // return new JoinCommand(db, rawCommand);
-
-    // default:
-    // return null;
-    // }
     return switch (commandType) {
       case "CREATE", "DROP" -> new TableCommand(db, rawCommand);
       case "INSERT" -> new InsertCommand(db, rawCommand);
@@ -73,29 +48,33 @@ public class QueryParser {
   public static ConditionNode parseWhere(String whereClause) {
     whereClause = whereClause.trim();
 
-    // if(whereClause.startsWith("(") && whereClause.endsWith(")")){
-    // System.out.println("[INFO] Detected Brackets: " + whereClause);
-    // return parseWhere(whereClause.substring(1, whereClause.length()-1));
-    // }
+    if (whereClause.startsWith("(") && whereClause.endsWith(")")) {
+      int lastIndex = findMatchingParenthesis(whereClause);
+      // System.out.println("[INFO] Detected Brackets: " + whereClause);
+      // return parseWhere(whereClause.substring(1, whereClause.length() - 1));
+      if (lastIndex == whereClause.length() - 1) {
+        return parseWhere(whereClause.substring(1, lastIndex));
+      }
+    }
 
     // single condition -> where name == 'Bob';
     if (!whereClause.matches("(?i).*\\s(AND|OR)\\s.*")) {
-      System.out.println("Single condition detected: " + whereClause);
+      // System.out.println("Single condition detected: " + whereClause);
       return new ConditionNode(whereClause);
     }
     // find outer AND/OR operator
-    int lastIndex = findMainOperator(whereClause);
-    if (lastIndex == -1)
+    int mainOpIndex = findMainOperator(whereClause);
+    if (mainOpIndex == -1)
       return new ConditionNode(whereClause);
 
-    String leftPart = whereClause.substring(0, lastIndex).trim();
-    String operator = whereClause.substring(lastIndex, lastIndex + 3).trim();
-    String rightPart = whereClause.substring(lastIndex + 3).trim();
+    String leftPart = whereClause.substring(0, mainOpIndex).trim();
+    String operator = whereClause.substring(mainOpIndex, mainOpIndex + 3).trim();
+    String rightPart = whereClause.substring(mainOpIndex + 3).trim();
 
-    System.out.println("[INFO] Splitting condition:");
-    System.out.println("[INFO] Left: " + leftPart);
-    System.out.println("[INFO] Operator: " + operator);
-    System.out.println("[INFO] Right: " + rightPart);
+    // System.out.println("[INFO] Splitting condition:");
+    // System.out.println("[INFO] Left: " + leftPart);
+    // System.out.println("[INFO] Operator: " + operator);
+    // System.out.println("[INFO] Right: " + rightPart);
 
     // recurse left/right side.
     return new ConditionNode(operator, parseWhere(leftPart), parseWhere(rightPart));
@@ -103,19 +82,39 @@ public class QueryParser {
 
   public static int findMainOperator(String whereClause) {
     int level = 0;
+    int lastAndIndex = -1;
+    int lastOrIndex = -1;
     for (int i = 0; i < whereClause.length() - 2; i++) {
       if (whereClause.charAt(i) == '(')
         level++;
       if (whereClause.charAt(i) == ')')
         level--;
 
-      // find outer operator, return started index number
-      if (level == 0 &&
-          (whereClause.substring(i).toUpperCase().startsWith("AND") ||
-              whereClause.substring(i).toUpperCase().startsWith("OR"))) {
-        return i;
+      if (level == 0) {
+        if (whereClause.substring(i).toUpperCase().startsWith("AND")) {
+          lastAndIndex = i; // store `AND` location
+        }
+        if (whereClause.substring(i).toUpperCase().startsWith("OR")) {
+          lastOrIndex = i; // store `OR` location
+        }
+      }
+
+    }
+    return lastOrIndex != -1 ? lastOrIndex : lastAndIndex;
+  }
+
+  private static int findMatchingParenthesis(String whereClause) {
+    int level = 0;
+    for (int i = 0; i < whereClause.length(); i++) {
+      if (whereClause.charAt(i) == '(')
+        level++;
+      if (whereClause.charAt(i) == ')') {
+        level--;
+        if (level == 0)
+          return i;
       }
     }
     return -1;
   }
+
 }

@@ -20,16 +20,16 @@ public class UpdateCommand extends DBCommand {
         }
 
         try {
-            cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", ""); // 清理空格
-            if (!cmd.matches("(?i)^UPDATE\\s+\\w+\\s+SET\\s+.+\\s+WHERE\\s+.+$")) {
+            cmd = cmd.trim().replaceAll("\\s+", " "); // 清理空格
+            if (!cmd.matches("(?i)^UPDATE\\s+\\w+\\s+SET\\s+.+\\s+WHERE\\s+.+;$")) {
                 System.err.println("[ERROR] Invalid UPDATE syntax.");
                 return "[ERROR] Invalid SELECT syntax.";
             }
 
             // UPDATE syntax
-            String[] updateParts = cmd.split("(?i)\\s+SET\\s+", 2);
-            System.out.println(updateParts[0]);
-            System.out.println(updateParts[1]);
+            String[] updateParts = cmd.replaceAll(";$", "").split("(?i)\\s+SET\\s+", 2);
+            // System.out.println(updateParts[0]);
+            // System.out.println(updateParts[1]);
 
             String tableName = updateParts[0].split("\\s+")[1].trim();
 

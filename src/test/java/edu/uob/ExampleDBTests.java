@@ -185,7 +185,10 @@ public class ExampleDBTests {
         sendCommandToServer("CREATE TABLE orders (order_id, customer_id);");
         sendCommandToServer("CREATE TABLE customers (customer_id, name);");
         sendCommandToServer("INSERT INTO orders VALUES (1, 101);");
+        sendCommandToServer("INSERT INTO orders VALUES (2, 101);");
+
         sendCommandToServer("INSERT INTO customers VALUES (101, 'John Doe');");
+        sendCommandToServer("INSERT INTO customers VALUES (102, 'Tom');");
 
         String response = sendCommandToServer("JOIN orders AND customers ON customer_id AND customer_id;");
         assertTrue(response.contains("John Doe"),
@@ -251,13 +254,18 @@ public class ExampleDBTests {
         assertTrue(response.contains("Bob"), "Bob should appears in SELECT results.");
         assertFalse(response.contains("Alice"), "Alice should not appears in SELECT results.");
 
-        // OK
-        // String response2 = sendCommandToServer("SELECT * FROM employees WHERE name
-        // LIKE 'A' AND (salary > 5000 OR name == 'Bob');");
+        //
+        String response2 = sendCommandToServer(
+                "SELECT * FROM employees WHERE name LIKE 'A' AND (salary > 5000 OR name == 'Bob');");
+        assertTrue(response2.contains("Amy"), "Amy should appears in SELECT results.");
+        assertTrue(response2.contains("Alex"), "Alex should appears in SELECT results.");
+        assertFalse(response2.contains("Bob"), "Bob should not appears in SELECT results.");
 
-        // FIXME:ERROR
-        // String response2 = sendCommandToServer("SELECT * FROM employees WHERE name
-        // LIKE 'A' AND salary > 5000 OR name == 'Bob';");
+        String response3 = sendCommandToServer(
+                "SELECT * FROM employees WHERE name LIKE 'A' AND salary > 5000 OR name == 'Bob';");
+        assertTrue(response3.contains("Amy"), "Amy should appears in SELECT results.");
+        assertTrue(response3.contains("Alex"), "Alex should appears in SELECT results.");
+        assertTrue(response3.contains("Bob"), "Bob should appears in SELECT results.");
 
     }
 }

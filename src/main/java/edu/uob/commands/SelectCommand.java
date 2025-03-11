@@ -24,13 +24,13 @@ public class SelectCommand extends DBCommand {
         }
 
         try {
-            cmd = cmd.trim().replaceAll("\\s+", " ").replaceAll(";$", "");
-            if (!cmd.matches("(?i)^SELECT\\s+.+\\s+FROM\\s+.+")) {
+            cmd = cmd.trim().replaceAll("\\s+", " ");
+            if (!cmd.matches("(?i)^SELECT\\s+.+\\s+FROM\\s+.+;$")) {
                 System.err.println("[ERROR] Invalid SELECT syntax.");
                 return "[ERROR] Invalid SELECT syntax.";
             }
 
-            String[] cmds = this.cmd.split("(?i)FROM");
+            String[] cmds = this.cmd.replaceAll(";$", "").split("(?i)FROM");
             if (cmds.length < 2 || cmds[1].trim().isEmpty()) {
                 System.err.println("[ERROR] Missing FROM table name.");
                 return "[ERROR] Missing FROM table name.";
@@ -69,9 +69,14 @@ public class SelectCommand extends DBCommand {
                 selectedCols = Arrays.stream(queryCol.split("\\s*,\\s*"))
                         .map(col -> columnMap.getOrDefault(col.toUpperCase(), col)) // relevant cols
                         .collect(Collectors.toList());
+                for (String col : selectedCols) {
+                    if (!header.contains(col)) {
+                        return "[ERROR] Column '" + col + "' does not exist in table.";
+                    }
+                }
             }
             selectedCols.remove("_DELETED");
-            System.out.println("selectedCols: " + selectedCols);
+            // System.out.println("selectedCols: " + selectedCols);
 
             // handle WHERE condition
             ConditionNode conditionTree = null;
@@ -112,7 +117,7 @@ public class SelectCommand extends DBCommand {
                     .map(row -> String.join("\t", row))
                     .collect(Collectors.joining("\n"));
 
-            System.out.println(tableResult);
+            // System.out.println(tableResult);
             return "[OK]\n" + tableResult;
 
         } catch (Exception e) {

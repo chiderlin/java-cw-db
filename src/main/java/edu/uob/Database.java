@@ -6,10 +6,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Database {
-  // private static final char END_OF_TRANSMISSION = 4;
+  private static final Set<String> RESERVED_KEYWORDS = Set.of(
+      "USE", "CREATE", "INSERT", "SELECT", "UPDATE", "ALTER", "DELETE",
+      "DROP", "JOIN", "AND", "OR", "LIKE", "TRUE", "FALSE", "ID", "_DELETED");
+
   final private String dbName;
   final private HashMap<String, List<List<String>>> tables = new HashMap<>(); // type 2
 
@@ -27,39 +31,6 @@ public class Database {
   public String getDbName() {
     return this.dbName;
   }
-
-  // public static void main(String args[]) {
-  // Database db = new Database("test");
-  // db.loadTableData("sheds");
-  // db._printTable("sheds");
-
-  // // --- test insert data -------
-  // List<String> values = new ArrayList<>();
-  // values.add("test");
-  // values.add("1000");
-  // values.add("2");
-  // db.insertData("sheds",values);
-  // // --- test insert data -------
-
-  // // --- test create table ------
-  // List<String> cols = new ArrayList<>();
-  // cols.add("name");
-  // cols.add("mark");
-  // cols.add("pass");
-  // // String pathStr =
-  // Paths.get("databases"+File.separator+"test").toAbsolutePath().toString();
-  // // Path path = Paths.get(pathStr);
-  // // db.createTable("test", path, cols);
-  // // --- test create table ------
-
-  // // --- test getData (select syntax) ------
-  // List<String> returncols = new ArrayList<>();
-  // returncols.add("id");
-  // returncols.add("Name");
-  // // List<String>
-  // // db.getData("sheds",returncols,)
-  // // --- test getData (select syntax) ------
-  // }
 
   /**
    * read tab file in memory (data structure)
@@ -84,7 +55,7 @@ public class Database {
       System.out.println(String.format("print table <%s>: %s", tableName, table));
       return;
     }
-    System.out.println("[ERROR _printTable] Table Not Found.");
+    System.err.println("[ERROR _printTable] Table Not Found.");
   }
 
   /*
@@ -132,7 +103,7 @@ public class Database {
 
   public String insertData(String tableName, List<String> values) {
     loadTableData(tableName);
-    _printTable(tableName);
+    // _printTable(tableName);
     List<List<String>> table = this.tables.get(tableName);
     if (tables == null || !tables.containsKey(tableName)) {
       System.err.println("[ERROR] Table not found: " + tableName);
@@ -172,7 +143,6 @@ public class Database {
     }
   }
 
-  //
   /**
    * UPDATE marks SET age = 35 WHERE name == 'Simon';
    * UPDATE test SET age = 35, City= 'Frankfurt' WHERE age < 18;
@@ -180,10 +150,10 @@ public class Database {
    */
   public String updateData(String tableName, Map<String, String> updates, ConditionNode conditionTree) {
     loadTableData(tableName);
-    _printTable(tableName);
+    // _printTable(tableName);
 
     if (!tables.containsKey(tableName)) {
-      System.out.println("[ERROR] Table " + tableName + " does not exist.");
+      System.err.println("[ERROR] Table " + tableName + " does not exist.");
       return "[ERROR] Table " + tableName + " does not exist.";
     }
 
@@ -200,18 +170,6 @@ public class Database {
     for (Map.Entry<String, String> entry : updates.entrySet()) {
       updatesUpper.put(entry.getKey().toUpperCase(), entry.getValue());
     }
-
-    // get set col index
-    // List<Integer> updateIndices = new ArrayList<>();
-    // for (String column : updatesUpper.keySet()) {
-    // int colIdx = headerUpper.indexOf(column);
-    // if (colIdx == -1) {
-    // System.err.println("[ERROR] Column " + column + " not found in table " +
-    // tableName);
-    // return "[ERROR] Column " + column + " not found in table " + tableName;
-    // }
-    // updateIndices.add(colIdx);
-    // }
 
     // compare value
     for (int i = 1; i < table.size(); i++) {
@@ -259,7 +217,7 @@ public class Database {
       for (int j = 0; j < header.size(); j++) {
         row.put(header.get(j).toUpperCase(), currentRow.get(j));
       }
-      System.out.println("row: " + row);
+      // System.out.println("row: " + row);
 
       if (conditionTree.evaluate(row)) {
         List<String> selectedRow = selectedIdx.stream()
@@ -267,16 +225,16 @@ public class Database {
             .collect(Collectors.toList());
         result.add(selectedRow);
       }
-      System.out.println("result: " + result);
+      // System.out.println("result: " + result);
     }
     return result;
   }
 
   public List<List<String>> getTable(String tableName) {
     loadTableData(tableName);
-    _printTable(tableName);
+    // _printTable(tableName);
     if (tables == null || !tables.containsKey(tableName)) {
-      System.out.println("[ERROR] Table not found: " + tableName);
+      System.err.println("[ERROR] Table not found: " + tableName);
       return Collections.emptyList();
     }
     return this.tables.get(tableName);
@@ -290,64 +248,93 @@ public class Database {
    * List<List<String>> result = joinData("coursework", "marks", "marksId", "id");
    */
   public List<List<String>> joinData(String table1Name, String table2Name, String table1JoinCol, String table2JoinCol) {
-    System.out.println("table1Name: " + table1Name);
-    System.out.println("table2Name: " + table2Name);
-    System.out.println("table1JoinCol: " + table1JoinCol);
-    System.out.println("table2JoinCol: " + table2JoinCol);
+    // System.out.println("table1Name: " + table1Name);
+    // System.out.println("table2Name: " + table2Name);
+    // System.out.println("table1JoinCol: " + table1JoinCol);
+    // System.out.println("table2JoinCol: " + table2JoinCol);
+
     loadTableData(table1Name);
     loadTableData(table2Name);
+
     if (!tables.containsKey(table1Name) || !tables.containsKey(table2Name)) {
-      System.out.println("One or both tables do not exist.");
+      System.err.println("[ERROR] One or both tables do not exist.");
       return Collections.emptyList();
     }
 
     List<List<String>> table1 = tables.get(table1Name);
     List<List<String>> table2 = tables.get(table2Name);
 
-    // Get headers from both tables
-    List<String> header1 = table1.get(0);
-    List<String> header2 = table2.get(0);
+    // Get headers from both tables (create copies to avoid modifying original)
+    List<String> header1 = new ArrayList<>(table1.get(0));
+    List<String> header2 = new ArrayList<>(table2.get(0));
 
     int joinIdx1 = header1.indexOf(table1JoinCol);
     int joinIdx2 = header2.indexOf(table2JoinCol);
 
     if (joinIdx1 == -1 || joinIdx2 == -1) {
-      System.out.println("[ERROR] Join column not found in one or both tables.");
+      System.err.println("[ERROR] Join column not found in one or both tables.");
       return Collections.emptyList();
     }
 
-    // filter _DELETED==true
+    // Find indexes of id and _DELETED columns dynamically
+    int idIdx1 = header1.indexOf("id");
+    int deletedIdx1 = header1.indexOf("_DELETED");
+    int idIdx2 = header2.indexOf("id");
+    int deletedIdx2 = header2.indexOf("_DELETED");
+
+    // Filter rows where _DELETED == "TRUE"
     List<List<String>> filteredTable1 = table1.stream()
-        .filter(row -> row == header1 || !row.get(header1.indexOf("_DELETED")).equalsIgnoreCase("TRUE"))
+        .filter(row -> row == table1.get(0) || deletedIdx1 == -1 || !row.get(deletedIdx1).equalsIgnoreCase("TRUE"))
         .collect(Collectors.toList());
 
     List<List<String>> filteredTable2 = table2.stream()
-        .filter(row -> row == header2 || !row.get(header2.indexOf("_DELETED")).equalsIgnoreCase("TRUE"))
+        .filter(row -> row == table2.get(0) || deletedIdx2 == -1 || !row.get(deletedIdx2).equalsIgnoreCase("TRUE"))
         .collect(Collectors.toList());
 
-    // remove _DELETED header
+    // Create new header for joined table
     List<String> joinedHeader = new ArrayList<>();
-    joinedHeader.addAll(header1);
-    joinedHeader.addAll(header2);
-    joinedHeader.remove("_DELETED");
-    joinedHeader.remove("_DELETED");
+    joinedHeader.add("id"); // New id for joined table
+
+    // Add columns from table1, excluding id and _DELETED
+    for (String col : header1) {
+      if (!col.equalsIgnoreCase("id") && !col.equalsIgnoreCase("_DELETED") && !col.equalsIgnoreCase(table1JoinCol)) {
+        joinedHeader.add(table1Name + "." + col);
+      }
+    }
+
+    // Add columns from table2, excluding id and _DELETED
+    for (String col : header2) {
+      if (!col.equalsIgnoreCase("id") && !col.equalsIgnoreCase("_DELETED") && !col.equalsIgnoreCase(table1JoinCol)) {
+        joinedHeader.add(table2Name + "." + col);
+      }
+    }
 
     List<List<String>> joinedTable = new ArrayList<>();
     joinedTable.add(joinedHeader);
 
-    // execute join
-    for (int i = 1; i < filteredTable1.size(); i++) { // skip header
+    // Execute join
+    int newId = 1;
+    for (int i = 1; i < filteredTable1.size(); i++) { // Skip header
       List<String> row1 = filteredTable1.get(i);
       for (int j = 1; j < filteredTable2.size(); j++) {
         List<String> row2 = filteredTable2.get(j);
-        if (row1.get(joinIdx1).equals(row2.get(joinIdx2))) { // match join col
+        if (row1.get(joinIdx1).equals(row2.get(joinIdx2))) { // Match join column
           List<String> joinedRow = new ArrayList<>();
-          joinedRow.addAll(row1);
-          joinedRow.addAll(row2);
+          joinedRow.add(String.valueOf(newId++)); // Add new ID
 
-          // remove _deleted in data row
-          joinedRow.remove(header1.indexOf("_DELETED"));
-          joinedRow.remove(header2.indexOf("_DELETED"));
+          // Add row1 data except id and _DELETED
+          for (int k = 0; k < row1.size(); k++) {
+            if (k != idIdx1 && k != deletedIdx1 && k != joinIdx1) {
+              joinedRow.add(row1.get(k));
+            }
+          }
+
+          // Add row2 data except id and _DELETED
+          for (int k = 0; k < row2.size(); k++) {
+            if (k != idIdx2 && k != deletedIdx2 && k != joinIdx2) {
+              joinedRow.add(row2.get(k));
+            }
+          }
 
           joinedTable.add(joinedRow);
         }
@@ -364,7 +351,7 @@ public class Database {
    */
   public String alterData(String tableName, String action, String columnName) {
     loadTableData(tableName);
-    _printTable(tableName);
+    // _printTable(tableName);
 
     if (!tables.containsKey(tableName)) {
       System.err.println("[ERROR] Table " + tableName + "does not exist.");
@@ -374,14 +361,20 @@ public class Database {
 
     List<String> header = new ArrayList<>(table.get(0));
     if ("ADD".equalsIgnoreCase(action)) {
+      if (RESERVED_KEYWORDS.contains(columnName.toUpperCase())) {
+        return "[ERROR] Column name cannot be a reserved SQL keyword: " + columnName;
+      }
+
       if (header.contains(columnName)) {
         System.err.println("[ERROR] Column " + columnName + " already exists in table " + tableName);
         return "[ERROR] Column " + columnName + " already exists in table " + tableName;
       }
+
       // Add column to header
       header.add(columnName);
-      System.out.println("Column " + columnName + " added successfully.");
-      System.out.println("header: " + header);
+      // System.out.println("Column " + columnName + " added successfully.");
+      // System.out.println("header: " + header);
+
       // Add default empty values to existing rows;
       for (int i = 1; i < table.size(); i++) {
         if (table.get(i) == null) {
@@ -390,8 +383,8 @@ public class Database {
         try {
           table.set(i, new ArrayList<>(table.get(i))); // Immutable List turn it to ArrayList, so we can add value
           table.get(i).add(" "); // add an empty string as the default value;
-          System.out.println(" table.get(i) " + table.get(i));
-          System.out.println(" table.get(i) " + table.get(i).size());
+          // System.out.println(" table.get(i) " + table.get(i));
+          // System.out.println(" table.get(i) " + table.get(i).size());
 
         } catch (Exception e) {
           System.err.println("[ERROR] Failed to add column to row " + i + ": " + e.getMessage());
@@ -401,12 +394,12 @@ public class Database {
     } else if ("DROP".equalsIgnoreCase(action)) {
       int colIdx = header.indexOf(columnName);
       if (colIdx == -1) {
-        System.out.println("[ERROR] Column " + columnName + " does not exist in table " + tableName);
+        System.err.println("[ERROR] Column " + columnName + " does not exist in table " + tableName);
         return "[ERROR] Column " + columnName + " does not exist in table " + tableName;
       }
 
       if (columnName.equalsIgnoreCase("ID") || columnName.equalsIgnoreCase("_DELETED")) {
-        System.out.println("[ERROR] Cannot drop primary key 'ID' or system column '_DELETED'.");
+        System.err.println("[ERROR] Cannot drop primary key 'ID' or system column '_DELETED'.");
         return "[ERROR] Cannot drop primary key 'ID' or system column '_DELETED'.";
       }
 
@@ -438,7 +431,7 @@ public class Database {
   public String deleteData(String tableName, ConditionNode conditionTree) {
     // ensure table exists;
     loadTableData(tableName);
-    _printTable(tableName);
+    // _printTable(tableName);
     if (!tables.containsKey(tableName)) {
       System.err.println("[ERROR] Table " + tableName + "does not exists.");
       return "[ERROR] Table " + tableName + "does not exists.";
@@ -456,8 +449,9 @@ public class Database {
     boolean updated = false;
     for (int i = 1; i < table.size(); i++) {
       Map<String, String> row = convertRowToMap(table.get(i), header);
-      System.out.println("[INFO] conditionTree.evaluate(row): " + conditionTree.evaluate(row));
-      System.out.println("[INFO] row: " + row);
+      // System.out.println("[INFO] conditionTree.evaluate(row): " +
+      // conditionTree.evaluate(row));
+      // System.out.println("[INFO] row: " + row);
       if (conditionTree.evaluate(row)) {
         table.get(i).set(deleteIdx, "TRUE"); // delete
         updated = true;
@@ -496,7 +490,7 @@ public class Database {
     String fileName = String.format("databases/%s/%s.tab", dbName, tableName);
     File file = new File(fileName);
     if (!file.exists()) {
-      System.out.println("[ERROR] File not found: " + fileName);
+      System.err.println("[ERROR] File not found: " + fileName);
       return "[ERROR] File not found: " + fileName;
     }
     if (file.delete()) {
