@@ -66,9 +66,6 @@ public class ConditionNode {
       System.err.println("[ERROR] Invalid condition: " + condition);
       return false;
     }
-    // for (String part : parts) {
-    // System.out.println("part: " + part);
-    // }
 
     String column = parts[0].trim();
     String extractOperator = parts[1].trim();
@@ -104,9 +101,6 @@ public class ConditionNode {
         default -> false;
       };
     }
-
-    // System.out.println("STRING area rowValue: " + rowValue);
-    // System.out.println("STRING area value: " + value);
 
     // if not number, do sting
     return switch (extractOperator) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="edu.uob.ExampleDBTests" time="0.114" tests="12" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="edu.uob.ExampleDBTests" time="0.136" tests="12" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,8 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="TW"/>
     <property name="sun.boot.library.path" value="/Users/chider/Library/Java/JavaVirtualMachines/temurin-17.0.13/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter4508844496797672814.jar /Users/chider/code/bristol/cw-db/target/surefire 2025-03-11T01-47-13_273-jvmRun1 surefire197458641088212277tmp surefire_02896567276133323761tmp"/>
+    <property name="sun.java.command" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter13704662208575469144.jar /Users/chider/code/bristol/cw-db/target/surefire 2025-03-11T11-00-26_175-jvmRun1 surefire8146106990119591908tmp surefire_013224589860725674042tmp"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="test" value="edu.uob.ExampleDBTests"/>
     <property name="surefire.test.class.path" value="/Users/chider/code/bristol/cw-db/target/test-classes:/Users/chider/code/bristol/cw-db/target/classes:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter/5.8.2/junit-jupiter-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/Users/chider/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/Users/chider/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/Users/chider/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite/1.8.2/junit-platform-suite-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-api/1.8.2/junit-platform-suite-api-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-engine/1.8.2/junit-platform-suite-engine-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.8.2/junit-platform-suite-commons-1.8.2.jar:/Users/chider/.m2/repository/org/junit/platform/junit-platform-launcher/1.8.2/junit-platform-launcher-1.8.2.jar:"/>
@@ -26,10 +27,11 @@
     <property name="basedir" value="/Users/chider/code/bristol/cw-db"/>
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="line.separator" value="&#10;"/>
-    <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter4508844496797672814.jar"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="surefire.real.class.path" value="/Users/chider/code/bristol/cw-db/target/surefire/surefirebooter13704662208575469144.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="17.0.13+11"/>
     <property name="user.name" value="chider"/>
     <property name="path.separator" value=":"/>
@@ -52,10 +54,11 @@
     <property name="java.vm.version" value="17.0.13+11"/>
     <property name="java.specification.maintenance.version" value="1"/>
     <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="testAlterTable" classname="edu.uob.ExampleDBTests" time="0.036">
-    <system-out><![CDATA[[INFO] File created: xjtelbqvwy
+  <testcase name="testAlterTable" classname="edu.uob.ExampleDBTests" time="0.038">
+    <system-out><![CDATA[[INFO] File created: tjvhiebcao
 [INFO] Write file successfully.
 [OK] Table students created with schema: [id, name, age, _DELETED]
 [INFO] Write file successfully.
@@ -63,8 +66,8 @@ Column age dropped successfully.
 [INFO] Write file successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testUpdateData" classname="edu.uob.ExampleDBTests" time="0.015">
-    <system-out><![CDATA[[INFO] File created: rmpuuupivb
+  <testcase name="testUpdateData" classname="edu.uob.ExampleDBTests" time="0.01">
+    <system-out><![CDATA[[INFO] File created: kvokicbleb
 [INFO] Write file successfully.
 [OK] Table products created with schema: [id, name, price, _DELETED]
 [INFO] Write file successfully.
@@ -73,8 +76,8 @@ Column age dropped successfully.
 [OK] Table products updated successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testAdvanceWhereQuery" classname="edu.uob.ExampleDBTests" time="0.012">
-    <system-out><![CDATA[[INFO] File created: wxyadjybgb
+  <testcase name="testAdvanceWhereQuery" classname="edu.uob.ExampleDBTests" time="0.014">
+    <system-out><![CDATA[[INFO] File created: pwqiyjcvbj
 [INFO] Write file successfully.
 [OK] Table employees created with schema: [id, name, salary, _DELETED]
 [INFO] Write file successfully.
@@ -85,22 +88,22 @@ Column age dropped successfully.
 ]]></system-out>
   </testcase>
   <testcase name="testCaseInsensitiveSQL" classname="edu.uob.ExampleDBTests" time="0.004">
-    <system-out><![CDATA[[INFO] File created: aayyidblnj
+    <system-out><![CDATA[[INFO] File created: oicgqmslmm
 [INFO] Write file successfully.
 [OK] Table students created with schema: [id, name, age, _DELETED]
 [INFO] Write file successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testQueryID" classname="edu.uob.ExampleDBTests" time="0.003">
-    <system-out><![CDATA[[INFO] File created: olllwccipo
+  <testcase name="testQueryID" classname="edu.uob.ExampleDBTests" time="0.005">
+    <system-out><![CDATA[[INFO] File created: cunuejkmbp
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
 [INFO] Write file successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testBasicCreateAndQuery" classname="edu.uob.ExampleDBTests" time="0.007">
-    <system-out><![CDATA[randomName: sfjhhrmxyf
-[INFO] File created: sfjhhrmxyf
+  <testcase name="testBasicCreateAndQuery" classname="edu.uob.ExampleDBTests" time="0.006">
+    <system-out><![CDATA[randomName: ouvucobcey
+[INFO] File created: ouvucobcey
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
 [INFO] Write file successfully.
@@ -109,8 +112,8 @@ Column age dropped successfully.
 [INFO] Write file successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testJoinTables" classname="edu.uob.ExampleDBTests" time="0.006">
-    <system-out><![CDATA[[INFO] File created: pdbplfrosq
+  <testcase name="testJoinTables" classname="edu.uob.ExampleDBTests" time="0.01">
+    <system-out><![CDATA[[INFO] File created: tlfrprqelj
 [INFO] Write file successfully.
 [OK] Table orders created with schema: [id, order_id, customer_id, _DELETED]
 [INFO] Write file successfully.
@@ -121,8 +124,8 @@ Column age dropped successfully.
 [INFO] Write file successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testDeleteData" classname="edu.uob.ExampleDBTests" time="0.006">
-    <system-out><![CDATA[[INFO] File created: tfgghdfeyl
+  <testcase name="testDeleteData" classname="edu.uob.ExampleDBTests" time="0.008">
+    <system-out><![CDATA[[INFO] File created: ksfjyqwbia
 [INFO] Write file successfully.
 [OK] Table employees created with schema: [id, name, salary, _DELETED]
 [INFO] Write file successfully.
@@ -135,34 +138,34 @@ Column age dropped successfully.
 [OK] Deleted matching rows from table employees
 ]]></system-out>
   </testcase>
-  <testcase name="testNullValues" classname="edu.uob.ExampleDBTests" time="0.003">
-    <system-out><![CDATA[[INFO] File created: uatavdhcct
+  <testcase name="testNullValues" classname="edu.uob.ExampleDBTests" time="0.008">
+    <system-out><![CDATA[[INFO] File created: vuojgdsmvy
 [INFO] Write file successfully.
 [OK] Table employees created with schema: [id, name, salary, _DELETED]
 [INFO] Write file successfully.
 [INFO] Write file successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testTablePersistsAfterRestart" classname="edu.uob.ExampleDBTests" time="0.002">
-    <system-out><![CDATA[[INFO] File created: nigetglyke
+  <testcase name="testTablePersistsAfterRestart" classname="edu.uob.ExampleDBTests" time="0.004">
+    <system-out><![CDATA[[INFO] File created: dyfkplygnk
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
 [INFO] Write file successfully.
 ]]></system-out>
   </testcase>
-  <testcase name="testInvalidSQL" classname="edu.uob.ExampleDBTests" time="0.001">
-    <system-out><![CDATA[[INFO] File created: uwosrocevt
+  <testcase name="testInvalidSQL" classname="edu.uob.ExampleDBTests" time="0.002">
+    <system-out><![CDATA[[INFO] File created: dpuncimdbx
 ]]></system-out>
     <system-err><![CDATA[[ERROR] Invalid INSERT syntax.
 ]]></system-err>
   </testcase>
-  <testcase name="testForErrorTag" classname="edu.uob.ExampleDBTests" time="0.003">
-    <system-out><![CDATA[[INFO] File created: uprhdeauol
+  <testcase name="testForErrorTag" classname="edu.uob.ExampleDBTests" time="0.006">
+    <system-out><![CDATA[[INFO] File created: grkjgymslr
 [INFO] Write file successfully.
 [OK] Table marks created with schema: [id, name, mark, pass, _DELETED]
 [INFO] Write file successfully.
 ]]></system-out>
-    <system-err><![CDATA[[ERROR] File not found: databases/uprhdeauol/libraryfines.tab
+    <system-err><![CDATA[[ERROR] File not found: databases/grkjgymslr/libraryfines.tab
 [ERROR] Table libraryfines does not exist.
 ]]></system-err>
   </testcase>
