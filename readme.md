@@ -17,4 +17,9 @@ mvn exec:java@client
 ## Database
 
 mvn exec:java -Dexec.mainClass="edu.uob.Database"
+
 # java-cw-db
+
+### Structure
+
+![Structure](structure.jpeg)
